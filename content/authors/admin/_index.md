@@ -119,5 +119,6 @@ social:
 highlight_name: true
 ---
 
-Haojian Huang is a professor of artificial intelligence at the Stanford AI Lab. Her research interests include distributed robotics, mobile computing and programmable matter. She leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
+Haojian Huang is an incoming master's student at the University of Hong Kong, having graduated from Harbin Engineering University. He was mentored by [Professor Xuelong Li](https://iopen.nwpu.edu.cn/info/1015/1172.htm) and [Associate Professor Mulin Chen](https://iopen.nwpu.edu.cn/info/1251/1853.htm), and completed an internship at TeleAI. His research encompasses Multi-Modality, LLM/MLLM, Trusted AI, Customized AIGC, and Personality Attended AGI. Additionally, he leads the CareerSynapse organization, dedicated to empowering practical applications with LLM. <span style="color:red">He is open and looking forward to all forms of collaboration.</span> Contact him at haojianhuang927 AT gmail.com.
+
 {style="text-align: justify;"}
