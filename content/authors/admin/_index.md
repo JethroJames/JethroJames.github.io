@@ -17,7 +17,7 @@ status:
 superuser: true
 
 # Role/position/tagline
-role: Professor of Artificial Intelligence
+role: Researcher of Artificial Intelligence
 
 # Organizations/Affiliations to show in About widget
 organizations:
@@ -25,13 +25,16 @@ organizations:
     url: https://www.cs.hku.hk/
 
 # Short bio (displayed in user profile at end of posts)
-bio: My research interests include distributed robotics, mobile computing and programmable matter.
+bio: My research interests include Multi-Modality, Vision-Language Model and Hallucination of MLLM/LLM.
 
 # Interests to show in About widget
 interests:
-  - Artificial Intelligence
-  - Computational Linguistics
-  - Information Retrieval
+  - Multi-Modal / Multi-view Learning
+  - Uncertainty Quantification / Explanable AI / Trusted AI / Noisy-Correspondence Learning / Hallucination in LLM/MLLM
+  - Crafting AIGC for Discriminative Tasks
+  - Multi-Modal Video Understanding 
+  - Cutomized AIGC
+  - Personality Attended AGI / Multi-Modal Personality Grounding
 
 # Education to show in About widget
 education:
@@ -102,7 +105,7 @@ social:
     link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
   - icon: github
     icon_pack: fab
-    link: https://github.com/gcushen
+    link: https://github.com/JethroJames
   - icon: linkedin
     icon_pack: fab
     link: https://www.linkedin.com/
@@ -117,5 +120,5 @@ social:
 highlight_name: true
 ---
 
-Chien Shiung Wu is a professor of artificial intelligence at the Stanford AI Lab. Her research interests include distributed robotics, mobile computing and programmable matter. She leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
+Haojian Huang is a professor of artificial intelligence at the Stanford AI Lab. Her research interests include distributed robotics, mobile computing and programmable matter. She leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
 {style="text-align: justify;"}
