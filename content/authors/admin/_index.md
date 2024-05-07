@@ -29,12 +29,11 @@ bio: My research interests include Multi-Modality, Vision-Language Model and Hal
 
 # Interests to show in About widget
 interests:
-  - Multi-Modal / Multi-view Learning
-  - Uncertainty Quantification / Explanable AI / Trusted AI / Noisy-Correspondence Learning / Hallucination in LLM/MLLM
   - Crafting AIGC for Discriminative Tasks
-  - Multi-Modal Video Understanding 
+  - Trusted AI
+  - Video Understanding 
   - Cutomized AIGC
-  - Personality Attended AGI / Multi-Modal Personality Grounding
+  - Personality Attended AGI
 
 # Education to show in About widget
 education:
