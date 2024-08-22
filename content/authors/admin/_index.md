@@ -25,24 +25,23 @@ organizations:
     url: https://www.cs.hku.hk/
 
 # Short bio (displayed in user profile at end of posts)
-bio: My research interests include Multi-Modality, Vision-Language Model and Hallucination of MLLM/LLM.
+bio: My research interests include Uncertainty Estimation in Vision-Language Model, Hallucination of MLLM/LLM and Multi-Modal Understanding.
 
 # Interests to show in About widget
 interests:
   - Trusted AI
-  - Representation Learning
-  - Cutomized AIGC / Personality Attended AGI
-  - Crafting AIGC for Discriminative Tasks
+  - Personalized AGI
+  - Video Understanding
 
 # Education to show in About widget
 education:
   courses:
   - course: MSc in Computer Science
     institution: Department of Computer Science
-    year: currently enrolled
+    year: 2024-2025
   - course: BSc in Computer Science
     institution: Department of Computer Science
-    year: 2024 (expected)
+    year: 2020-2024
 
 # Skills
 # For available icons, see: https://docs.hugoblox.com/getting-started/page-builder/#icons
@@ -92,13 +91,7 @@ social:
   - icon: envelope
     icon_pack: fas
     link: '/#contact'
-  - icon: twitter
-    icon_pack: fab
-    link: https://twitter.com/GeorgeCushen
-    label: Follow me on Twitter
-    display:
-      header: true
-  - icon: graduation-cap # Alternatively, use `google-scholar` icon from `ai` icon pack
+ S  - icon: graduation-cap # Alternatively, use `google-scholar` icon from `ai` icon pack
     icon_pack: fas
     link: https://scholar.google.com.hk/citations?user=ab5uUAcAAAAJ&hl=zh-CN
   - icon: github
@@ -116,9 +109,10 @@ social:
 
 # Highlight the author in author lists? (true/false)
 highlight_name: true
+
 ---
 
-Haojian Huang is an incoming master's student at the University of Hong Kong, having graduated from Harbin Engineering University. He was mentored by Professor [Xuelong Li](https://iopen.nwpu.edu.cn/info/1015/1172.htm) and Associate Professor [Mulin Chen](https://iopen.nwpu.edu.cn/info/1251/1853.htm), and continues his role as an Algorithm Intern at [**TeleAI**](https://github.com/Tele-AI). His research encompasses Multi-Modality, Representation Learning, LLM/MLLM, Trusted AI, Customized AIGC, and Personality Attended AGI. Additionally, he leads the [**CareerSynapse**](https://github.com/CareerSynapse), dedicated to empowering practical applications with LLM. <span style="color:red; font-weight:bold">He is open and looking forward to all forms of collaboration.</span> Contact him at haojianhuang927 AT gmail.com.
+Haojian Huang is an incoming master's student at the University of Hong Kong, having graduated from Harbin Engineering University. He was mentored by Professor [Xuelong Li](https://iopen.nwpu.edu.cn/info/1015/1172.htm) and Associate Professor [Mulin Chen](https://iopen.nwpu.edu.cn/info/1251/1853.htm), and continues his role as an Intern at [**TeleAI**](https://github.com/Tele-AI). His researh encompasses Trusted AI, Customized AIGC, and Video Understanding. Additionally, he leads the [**CareerSynapse**](https://github.com/CareerSynapse), dedicated to empowering practical applications with LLM. <span style="color:red; font-weight:bold">ANY AI research collaboration is welcome! And He is also a AI job-seeker now.</span> Contact him at haojianhuang927 AT gmail.com.
 
 
 {style="text-align: justify;"}
