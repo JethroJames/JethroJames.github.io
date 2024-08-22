@@ -112,7 +112,7 @@ highlight_name: true
 
 ---
 
-Haojian Huang is an incoming master's student at the University of Hong Kong, having graduated from Harbin Engineering University. He was mentored by Professor [Xuelong Li](https://iopen.nwpu.edu.cn/info/1015/1172.htm) and Associate Professor [Mulin Chen](https://iopen.nwpu.edu.cn/info/1251/1853.htm), and continues his role as an Intern at [**TeleAI**](https://github.com/Tele-AI). His researh encompasses Trusted AI, Customized AIGC and Video Understanding. Additionally, he leads the [**CareerSynapse**](https://github.com/CareerSynapse), dedicated to empowering practical applications with LLM. <span style="color:red; font-weight:bold">ANY AI research collaboration is welcome! And He is also a AI job-seeker now.</span> Contact him at haojianhuang927 AT gmail.com.
+Haojian Huang is an master student at the University of Hong Kong, having graduated from Harbin Engineering University. He was mentored by Professor [Xuelong Li](https://iopen.nwpu.edu.cn/info/1015/1172.htm) and Associate Professor [Mulin Chen](https://iopen.nwpu.edu.cn/info/1251/1853.htm), and continues his role as an Intern at [**TeleAI**](https://github.com/Tele-AI). His researh encompasses Trusted AI, Customized AIGC and Video Understanding. Additionally, he leads the [**CareerSynapse**](https://github.com/CareerSynapse), dedicated to empowering practical applications with LLM. <span style="color:red; font-weight:bold">ANY AI research collaboration is welcome! And He is also a AI job-seeker now.</span> Contact him at haojianhuang927 AT gmail.com.
 
 
 {style="text-align: justify;"}
