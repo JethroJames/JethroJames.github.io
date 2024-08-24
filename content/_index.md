@@ -50,7 +50,7 @@ sections:
       username: admin
     design:
       columns: '1'
-  - block: experience
+ - block: experience
     content:
       title: Experience
       # Date format for experience
@@ -85,7 +85,6 @@ sections:
           description: Taught electronic engineering and researched semiconductor physics.
     design:
       columns: '2'
-      
  - block: portfolio
     id: projects
     content:
