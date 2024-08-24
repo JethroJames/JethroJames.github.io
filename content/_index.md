@@ -75,7 +75,7 @@ sections:
               * Analysing
               * Modelling
               * Deploying
-        - title: Professor of Semiconductor Physics
+      - title: Professor of Semiconductor Physics
           company: University X
           company_url: ''
           company_logo: org-x
@@ -83,8 +83,21 @@ sections:
           date_start: '2016-01-01'
           date_end: '2020-12-31'
           description: Taught electronic engineering and researched semiconductor physics.
+      - title: Multimodal cognitive computing Research and development intern
+          company: TeleAI
+          company_url: ''
+          company_logo: TeleAI
+          location: Beijing & Shanghai
+          date_start: '2024-02-22'
+          date_end: '2024-08-16'
+          description: |2-
+              Responsibilities include:
+
+              * Paper Report
+              * Modelling
+              * Coding
     design:
-      columns: '2'
+      columns: '3'
   - block: accomplishments
     content:
       # Note: `&shy;` is used to add a 'soft' hyphen in a long heading.
