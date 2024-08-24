@@ -90,7 +90,12 @@ sections:
           location: Beijing & Shanghai
           date_start: '2024-02-22'
           date_end: '2024-08-16'
-          description: Taught electronic engineering and researched semiconductor physics.
+          description:|2-
+              Responsibilities include:
+
+              * Analysing
+              * Modelling
+              * Deploying
 
 
     design:
