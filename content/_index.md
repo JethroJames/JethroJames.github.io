@@ -75,11 +75,23 @@ sections:
               * Analysing
               * Modelling
               * Deploying
+        - title: Multimodal cognitive computing Research and development intern
+          company: Big Data Development Center, Ministry of Agriculture and Rural Affairs of the People's Republic of China
+          company_url: ''
+          company_logo: dsj2024_logo
+          location: Beijing
+          date_start: '2023-03-01'
+          date_end: '2023-06-09'
+          description: |2-
+              Responsibilities include:
 
+              * Analysing
+              * Modelling
+              * Deploying
 
 
     design:
-      columns: '1'
+      columns: '2'
  
   - block: collection
     id: posts
