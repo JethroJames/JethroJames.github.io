@@ -13,10 +13,18 @@ image:
   focal_point: Smart
 
 links:
-  - icon: academicons/arxiv
-    icon_pack: academicons
+  - icon: ai-arxiv
+    icon_pack: ai
     name: Preprint
     url: https://arxiv.org/abs/2404.09640
+  - icon: fab fa-github
+    icon_pack: fa
+    name: Code
+    url: https://github.com/JethroJames/CREST
+  - icon: fas fa-file-pdf
+    icon_pack: fa
+    name: PDF
+    url: https://arxiv.org/pdf/2404.09640
 url_code: 'https://github.com/JethroJames/CREST'
 url_pdf: 'https://arxiv.org/pdf/2404.09640'
 url_slides: ''
