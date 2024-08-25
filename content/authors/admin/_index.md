@@ -91,9 +91,15 @@ social:
   - icon: envelope
     icon_pack: fas
     link: '/#contact'
-  - icon: graduation-cap # Alternatively, use `google-scholar` icon from `ai` icon pack
-    icon_pack: fas
+  - icon: google-scholar `graduation-cap` # Alternatively, use `google-scholar` icon from `ai` icon pack
+    icon_pack: ai
     link: https://scholar.google.com.hk/citations?user=ab5uUAcAAAAJ&hl=zh-CN
+  - icon: dblp
+    icon_pack: ai
+    link: https://dblp.org/pid/355/4169.html
+  - icon: orcid
+    icon_pack: ai
+    link: https://orcid.org/0000-0002-0661-712X    
   - icon: github
     icon_pack: fab
     link: https://github.com/JethroJames
