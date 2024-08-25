@@ -64,7 +64,7 @@ sections:
       #   Leave `date_end` empty if it's your current employer.
       #   Begin multi-line descriptions with YAML's `|2-` multi-line prefix.
       items:
-        - title: Multimodal Cognitive Computing Research and Development Intern
+        - title: Multimodal Cognitive Computing Research and Development Intern (On-Site)
           company: TeleAI
           company_url: ''
           company_logo: TeleAI
@@ -78,7 +78,7 @@ sections:
               * Literature Review
               * Coding
               * Paper Writting
-        - title: Research Intern
+        - title: Research Intern (Remote)
           company: Hangzhou Inovation Institute of Beihang University
           company_url: ''
           company_logo: buaa
@@ -91,7 +91,7 @@ sections:
               * Research
               * Modeling
               * Writting
-        - title: Research Intern
+        - title: Research Intern (Remote)
           company: Big Data Development Center, Ministry of Agriculture and Rural Affairs of the People's Republic of China
           company_url: ''
           company_logo: nyb
@@ -125,10 +125,12 @@ sections:
       buttons:
         - name: All
           tag: '*'
-        - name: Deep Learning
-          tag: Deep Learning
-        - name: Other
-          tag: Demo
+        - name: Video Understanding
+          tag: Video Understanding
+        - name: Trusted AI
+          tag: Trusted AI
+        - name: Personalized AGI
+          tag: Personalized AGI
     design:
       # Choose how many columns the section has. Valid values: '1' or '2'.
       columns: '1'
@@ -184,18 +186,13 @@ sections:
       # Contact (add or remove contact options as necessary)
       email: haojianhuang@connect.hku.hk
       phone: 53574603
-      appointment_url: 'https://calendly.com'
       address:
-        street: 450 Serra Mall
+        street: Pokfulam Road
         city: Hong Kong
         region: CN
-        postcode: '94305'
+        postcode: '999077'
         country: China
         country_code: CN
-      directions: Enter Building 1 and take the stairs to Office 200 on Floor 2
-      office_hours:
-        - 'Monday 10:00 to 13:00'
-        - 'Wednesday 09:00 to 10:00'
       # Choose a map provider in `params.yaml` to show a map from these coordinates
       coordinates:
         latitude: '22.17'
