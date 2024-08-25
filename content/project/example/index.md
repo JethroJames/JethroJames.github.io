@@ -1,9 +1,9 @@
 ---
-title: Example Project
-summary: An example of using the in-built project page.
+title: CREST: Cross-modal Resonance through Evidential Deep Learning for Enhanced Zero-Shot Learning
+summary: Towards trusted zero-shot learning
 tags:
-  - Deep Learning
-date: '2016-04-27T00:00:00Z'
+  - Trusted AI
+date: '2024-07-22T00:00:00Z'
 
 # Optional external URL for project (replaces project detail page).
 external_link: ''
