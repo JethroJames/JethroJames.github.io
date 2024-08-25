@@ -1,5 +1,5 @@
 ---
-title: "FineCLIPER"
+title: FineCLIPER
 summary: "A detailed description of the FineCLIPER project."
 tags:
   - Video Understanding
