@@ -9,8 +9,9 @@ date: '2024-07-22T00:00:00Z'
 external_link: ''
 
 image:
-  caption: Photo by Toa Heftiba on Unsplash
+  caption: "Custom Image"
   focal_point: Smart
+  path: "CREST.jpg"
 
 links:
   - icon: arxiv
