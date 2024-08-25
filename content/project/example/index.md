@@ -1,8 +1,8 @@
 ---
-title: CREST Cross-modal Resonance through Evidential Deep Learning for Enhanced Zero-Shot Learning
+title: CREST`:` Cross-modal Resonance through Evidential Deep Learning for Enhanced Zero-Shot Learning
 summary: Towards trusted zero-shot learning
 tags:
-  - Deep Learning
+  - Trusted AI
 date: '2024-07-22T00:00:00Z'
 
 # Optional external URL for project (replaces project detail page).
