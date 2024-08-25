@@ -182,7 +182,7 @@ sections:
       title: Contact
       subtitle:
       text: |-
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mi diam, venenatis ut magna et, vehicula efficitur enim.
+        Any AI research collaboration is welcome! And He is also a AI job-seeker now.
       # Contact (add or remove contact options as necessary)
       email: haojianhuang@connect.hku.hk
       phone: 53574603
@@ -222,4 +222,5 @@ sections:
           captcha: false
     design:
       columns: '2'
+    
 ---
