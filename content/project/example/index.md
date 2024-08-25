@@ -17,8 +17,8 @@ links:
     icon_pack: fab
     name: Follow
     url: https://twitter.com/georgecushen
-url_code: 'https://github.com/JethroJames/CREST'
-url_pdf: 'https://arxiv.org/pdf/2404.09640'
+url_code: ''
+url_pdf: ''
 url_slides: ''
 url_video: ''
 
