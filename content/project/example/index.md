@@ -1,6 +1,6 @@
 ---
-title: CREST : Cross-modal Resonance through Evidential Deep Learning for Enhanced Zero-Shot Learning
-summary: Towards trusted zero-shot learning
+title: "CREST: Cross-modal Resonance through Evidential Deep Learning for Enhanced Zero-Shot Learning"
+summary: "Towards trusted zero-shot learning"
 tags:
   - Trusted AI
 date: '2024-07-22T00:00:00Z'
@@ -9,7 +9,7 @@ date: '2024-07-22T00:00:00Z'
 external_link: ''
 
 image:
-  caption: Photo by rawpixel on Unsplash
+  caption: "Photo by rawpixel on Unsplash"
   focal_point: Smart
 
 links:
