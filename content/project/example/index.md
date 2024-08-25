@@ -9,9 +9,8 @@ date: '2024-07-22T00:00:00Z'
 external_link: ''
 
 image:
-  caption: "My Custom Photo"
+  caption: Photo by Toa Heftiba on Unsplash
   focal_point: Smart
-  path: "uploads/CREST.svg"
 
 links:
   - icon: arxiv
