@@ -9,8 +9,9 @@ date: '2024-07-22T00:00:00Z'
 external_link: ''
 
 image:
-  caption: "Photo by rawpixel on Unsplash"
+  caption: "My Custom Photo"
   focal_point: Smart
+  path: "uploads/CREST.svg"
 
 links:
   - icon: arxiv
