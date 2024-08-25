@@ -91,7 +91,7 @@ social:
   - icon: envelope
     icon_pack: fas
     link: '/#contact'
-  - icon: google-scholar `graduation-cap` # Alternatively, use `google-scholar` icon from `ai` icon pack
+  - icon: google-scholar  # `graduation-cap` with fab. Alternatively, use `google-scholar` icon from `ai` icon pack
     icon_pack: ai
     link: https://scholar.google.com.hk/citations?user=ab5uUAcAAAAJ&hl=zh-CN
   - icon: dblp
