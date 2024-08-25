@@ -13,7 +13,7 @@ image:
   focal_point: Smart
 
 links:
-  - icon: arxiv
+  - icon: academicons/arxiv
     icon_pack: academicons
     name: Preprint
     url: https://arxiv.org/abs/2404.09640
