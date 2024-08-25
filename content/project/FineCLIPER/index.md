@@ -1,5 +1,5 @@
 ---
-title: FineCLIPER: Multi-modal Fine-grained CLIP for Dynamic Facial Expression Recognition with AdaptERs
+title: "FineCLIPER: Multi-modal Fine-grained CLIP for Dynamic Facial Expression Recognition with AdaptERs"
 summary: Employing multi-level features for fine-tuning in DFER.
 tags:
   - Video Understanding
