@@ -195,8 +195,8 @@ sections:
         country_code: CN
       # Choose a map provider in `params.yaml` to show a map from these coordinates
       coordinates:
-        latitude: '22.17'
-        longitude: '114.09'  
+        latitude: '22.2830'
+        longitude: '114.1378'  
       contact_links:
         - icon: twitter
           icon_pack: fab
