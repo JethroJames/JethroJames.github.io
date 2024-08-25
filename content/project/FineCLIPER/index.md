@@ -1,25 +1,14 @@
 ---
-title: FineCLIPER
-summary: "A detailed description of the FineCLIPER project."
+title: FineCLIPER: Multi-modal Fine-grained CLIP for Dynamic Facial Expression Recognition with AdaptERs
+summary: Employing multi-level features for fine-tuning in DFER.
 tags:
   - Video Understanding
-date: '2024-07-22T00:00:00Z'
+date: "2024-07-21T00:00:00Z"
 
 # Optional external URL for project (replaces project detail page).
-external_link: ''
+# external_link: https://example.org
 
 image:
-  caption: "FineCLIPER Project"
+  caption: Photo by Toa Heftiba on Unsplash
   focal_point: Smart
-  path: "FineCLIPER/FineCLIPER.jpg"
-
-links:
-  - icon: github
-    icon_pack: fab
-    name: Code
-    url: https://haroldchen19.github.io/FineCLIPER-Page/
-url_code: ''
-url_pdf: ''
-url_slides: ''
-url_video: ''
 ---
