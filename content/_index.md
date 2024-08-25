@@ -64,7 +64,7 @@ sections:
       #   Leave `date_end` empty if it's your current employer.
       #   Begin multi-line descriptions with YAML's `|2-` multi-line prefix.
       items:
-        - title: Multimodal cognitive computing Research and development intern
+        - title: Multimodal Cognitive Computing Research and Development Intern
           company: TeleAI
           company_url: ''
           company_logo: TeleAI
@@ -74,10 +74,24 @@ sections:
           description: |2-
               Responsibilities include:
 
-              * Analysing
-              * Modelling
-              * Deploying
-        - title: Multimodal cognitive computing Research and development intern
+              * Research Mobilization
+              * Literature Review
+              * Coding
+              * Paper Writting
+        - title: Research Intern
+          company: Hangzhou Inovation Institute of Beihang University
+          company_url: ''
+          company_logo: buaa
+          location: Hangzhou
+          date_start: '2023-10-01'
+          date_end: '2024-02-14'
+          description: |2-
+              Responsibilities include:
+
+              * Research
+              * Modeling
+              * Writting
+        - title: Research Intern
           company: Big Data Development Center, Ministry of Agriculture and Rural Affairs of the People's Republic of China
           company_url: ''
           company_logo: nyb
@@ -87,13 +101,12 @@ sections:
           description: |2-
               Responsibilities include:
 
-              * Analysing
-              * Modelling
-              * Deploying
-
+              * Data System Developing
+              * Research and Report
+              * Paper Writting
 
     design:
-      columns: '2'
+      columns: '3'
  
   - block: portfolio
     id: projects
