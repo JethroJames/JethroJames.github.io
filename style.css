@@ -304,16 +304,10 @@ a:hover { color: var(--link-hover); }
   transform: scale(1.03) rotate(1deg);
   box-shadow: 0 12px 32px rgba(0,0,0,0.15);
 }
-.avatar-placeholder {
-  width: 100%; height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-heading);
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--accent);
-  background: linear-gradient(135deg, var(--bg-alt), var(--surface));
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ===== SECTIONS ===== */
@@ -486,23 +480,32 @@ a:hover { color: var(--link-hover); }
 
 /* --- Banners --- */
 .pub-banner {
-  height: 96px;
+  height: 140px;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
   padding: 10px 14px;
+  background: var(--bg-alt);
 }
-.banner-icon {
+.banner-img {
   position: absolute;
-  right: 10px; top: 50%;
-  transform: translateY(-50%);
-  width: 72px; height: 72px;
-  opacity: 0.7;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.6s ease;
 }
-.pub-card:hover .banner-icon {
-  transform: translateY(-50%) scale(1.1) rotate(3deg);
+.pub-card:hover .banner-img {
+  transform: scale(1.06);
+}
+.pub-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 60%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .banner-video {
@@ -511,45 +514,10 @@ a:hover { color: var(--link-hover); }
 .banner-trusted {
   background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
-.banner-face {
-  background: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
-}
-.banner-generation {
-  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-}
-.banner-nlp {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-.banner-general {
-  background: linear-gradient(135deg, #6a85b6 0%, #bac8e0 100%);
-}
-
-.pub-banner::before {
-  content: '';
-  position: absolute;
-  width: 160px; height: 160px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  top: -60px; left: -30px;
-  animation: bannerPulse 8s ease-in-out infinite;
-}
-.pub-banner::after {
-  content: '';
-  position: absolute;
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  bottom: -20px; right: 30%;
-  animation: bannerPulse 10s ease-in-out infinite reverse;
-}
-@keyframes bannerPulse {
-  0%,100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15); opacity: 0.6; }
-}
 
 .pub-venue-badge {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: inline-block;
   font-size: 0.68rem;
   font-weight: 700;
@@ -557,12 +525,11 @@ a:hover { color: var(--link-hover); }
   border-radius: 4px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.35);
   color: #fff;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
-.venue-journal { background: rgba(0,0,0,0.3); }
-.venue-preprint { background: rgba(0,0,0,0.2); }
 
 .oral-badge {
   display: inline-block;
@@ -572,8 +539,7 @@ a:hover { color: var(--link-hover); }
   font-weight: 700;
   padding: 1px 6px;
   border-radius: 3px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   margin-left: 4px;
 }
 
