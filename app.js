@@ -1,9 +1,7 @@
 import { prepare, layout } from 'https://esm.sh/@chenglou/pretext'
 
 // ============================================================
-// Pretext Canvas – Decorative text layout visualization
-// Uses pretext's text measurement to render flowing academic
-// keywords in the hero background as a canvas-based effect.
+// Pretext Canvas – Research keyword flow in hero background
 // ============================================================
 
 const canvas = document.getElementById('pretextCanvas')
@@ -12,98 +10,78 @@ let animationId = null
 let particles = []
 
 const KEYWORDS = [
-  'Trusted AI', 'Video Understanding', 'Embodied AI', 'Agentic Systems',
-  'Evidential Deep Learning', 'Multi-View Classification', 'Zero-Shot Learning',
-  'Temporal Grounding', 'Preference Optimization', 'Facial Expression Recognition',
-  'AAAI', 'ICML', 'NeurIPS', 'ACM MM', 'Deep Learning', 'Computer Vision',
-  'Dempster-Shafer Theory', 'Uncertainty', 'Robustness', 'Multi-Modal',
-  'Video Generation', 'Language Models', 'Gaussian Splatting', 'Data Fusion'
+  'Embodied AI', 'Agentic System', 'Video Reasoning',
+  'Temporal Grounding', 'Preference Optimization', 'Multi-View Learning',
+  'Zero-Shot Learning', 'Evidential Deep Learning', 'Robustness',
+  'AAAI', 'ICML', 'NeurIPS', 'ACM MM', 'Gaussian Splatting',
+  'Spatial Reasoning', 'Robot', 'Computer Vision', 'Deep Learning'
 ]
 
 class TextParticle {
-  constructor(canvasW, canvasH) {
+  constructor(w, h) {
     this.text = KEYWORDS[Math.floor(Math.random() * KEYWORDS.length)]
-    this.fontSize = 12 + Math.random() * 16
+    this.fontSize = 11 + Math.random() * 14
     this.font = `${this.fontSize}px Inter`
-    this.x = Math.random() * canvasW
-    this.y = Math.random() * canvasH
-    this.vx = (Math.random() - 0.5) * 0.3
-    this.vy = -0.15 - Math.random() * 0.25
-    this.opacity = 0.05 + Math.random() * 0.2
-    this.canvasW = canvasW
-    this.canvasH = canvasH
-
+    this.x = Math.random() * w
+    this.y = Math.random() * h
+    this.vx = (Math.random() - 0.5) * 0.25
+    this.vy = -0.12 - Math.random() * 0.2
+    this.opacity = 0.04 + Math.random() * 0.18
+    this.w = w
+    this.h = h
     try {
-      const prepared = prepare(this.text, this.font)
-      const result = layout(prepared, canvasW, this.fontSize * 1.4)
-      this.measuredHeight = result.height
-    } catch {
-      this.measuredHeight = this.fontSize * 1.4
-    }
+      const p = prepare(this.text, this.font)
+      this.mh = layout(p, w, this.fontSize * 1.4).height
+    } catch { this.mh = this.fontSize * 1.4 }
   }
-
   update() {
     this.x += this.vx
     this.y += this.vy
-    if (this.y < -this.measuredHeight - 20) {
-      this.y = this.canvasH + 20
-      this.x = Math.random() * this.canvasW
-    }
-    if (this.x < -200) this.x = this.canvasW + 50
-    if (this.x > this.canvasW + 200) this.x = -50
+    if (this.y < -this.mh - 10) { this.y = this.h + 10; this.x = Math.random() * this.w }
+    if (this.x < -150) this.x = this.w + 40
+    if (this.x > this.w + 150) this.x = -40
   }
-
-  draw(ctx) {
-    ctx.save()
-    ctx.globalAlpha = this.opacity
-    ctx.font = this.font
-    ctx.fillStyle = getComputedStyle(document.documentElement)
-      .getPropertyValue('--text').trim()
-    ctx.fillText(this.text, this.x, this.y)
-    ctx.restore()
+  draw(c) {
+    c.save()
+    c.globalAlpha = this.opacity
+    c.font = this.font
+    c.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text').trim()
+    c.fillText(this.text, this.x, this.y)
+    c.restore()
   }
 }
 
 function initCanvas() {
   const dpr = window.devicePixelRatio || 1
-  const rect = canvas.parentElement.getBoundingClientRect()
-  canvas.width = rect.width * dpr
-  canvas.height = rect.height * dpr
-  canvas.style.width = rect.width + 'px'
-  canvas.style.height = rect.height + 'px'
+  const r = canvas.parentElement.getBoundingClientRect()
+  canvas.width = r.width * dpr
+  canvas.height = r.height * dpr
+  canvas.style.width = r.width + 'px'
+  canvas.style.height = r.height + 'px'
   ctx.scale(dpr, dpr)
-
   particles = []
-  const count = Math.min(Math.floor((rect.width * rect.height) / 25000), 40)
-  for (let i = 0; i < count; i++) {
-    particles.push(new TextParticle(rect.width, rect.height))
-  }
+  const n = Math.min(Math.floor((r.width * r.height) / 28000), 35)
+  for (let i = 0; i < n; i++) particles.push(new TextParticle(r.width, r.height))
 }
 
 function animate() {
-  const rect = canvas.parentElement.getBoundingClientRect()
-  ctx.clearRect(0, 0, rect.width, rect.height)
-  for (const p of particles) {
-    p.update()
-    p.draw(ctx)
-  }
+  const r = canvas.parentElement.getBoundingClientRect()
+  ctx.clearRect(0, 0, r.width, r.height)
+  for (const p of particles) { p.update(); p.draw(ctx) }
   animationId = requestAnimationFrame(animate)
 }
 
-function startCanvasAnimation() {
+function startCanvas() {
   if (animationId) cancelAnimationFrame(animationId)
   initCanvas()
   animate()
 }
 
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-if (!prefersReducedMotion.matches) {
-  startCanvasAnimation()
-  let resizeTimer
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer)
-    resizeTimer = setTimeout(startCanvasAnimation, 200)
-  })
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+if (!reducedMotion.matches) {
+  startCanvas()
+  let rt
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(startCanvas, 200) })
 }
 
 // ============================================================
@@ -113,91 +91,68 @@ if (!prefersReducedMotion.matches) {
 const themeToggle = document.getElementById('themeToggle')
 const root = document.documentElement
 
-function setTheme(theme) {
-  root.setAttribute('data-theme', theme)
-  localStorage.setItem('theme', theme)
-  if (!prefersReducedMotion.matches) {
-    setTimeout(startCanvasAnimation, 100)
-  }
+function setTheme(t) {
+  root.setAttribute('data-theme', t)
+  localStorage.setItem('theme', t)
+  if (!reducedMotion.matches) setTimeout(startCanvas, 80)
 }
 
-const savedTheme = localStorage.getItem('theme')
-if (savedTheme) {
-  setTheme(savedTheme)
-} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  setTheme('dark')
-}
+const saved = localStorage.getItem('theme')
+if (saved) setTheme(saved)
+else if (window.matchMedia('(prefers-color-scheme: dark)').matches) setTheme('dark')
 
 themeToggle.addEventListener('click', () => {
-  const current = root.getAttribute('data-theme')
-  setTheme(current === 'dark' ? 'light' : 'dark')
+  setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')
 })
 
 // ============================================================
-// Mobile Navigation
+// Mobile Nav
 // ============================================================
 
 const hamburger = document.getElementById('navHamburger')
 const navLinks = document.querySelector('.nav-links')
-
-hamburger.addEventListener('click', () => {
-  navLinks.classList.toggle('open')
-})
-
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => navLinks.classList.remove('open'))
-})
+hamburger.addEventListener('click', () => navLinks.classList.toggle('open'))
+document.querySelectorAll('.nav-links a').forEach(l =>
+  l.addEventListener('click', () => navLinks.classList.remove('open'))
+)
 
 // ============================================================
-// Scroll Reveal Animation
+// Scroll Reveal – staggered per batch
 // ============================================================
 
-const observer = new IntersectionObserver(
+const io = new IntersectionObserver(
   (entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 60)
-        observer.unobserve(entry.target)
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 50)
+        io.unobserve(e.target)
       }
     })
   },
-  { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
 )
-
-document.querySelectorAll('.news-item, .pub-item').forEach(el => {
-  observer.observe(el)
-})
+document.querySelectorAll('.news-item, .pub-card').forEach(el => io.observe(el))
 
 // ============================================================
 // Publication Filtering
 // ============================================================
 
 const filters = document.querySelectorAll('.pub-filter')
-const pubItems = document.querySelectorAll('.pub-item')
+const cards = document.querySelectorAll('.pub-card')
 
 filters.forEach(btn => {
   btn.addEventListener('click', () => {
     filters.forEach(f => f.classList.remove('active'))
     btn.classList.add('active')
-    const filter = btn.dataset.filter
-
-    pubItems.forEach(item => {
-      if (filter === 'all' || item.dataset.type === filter) {
-        item.classList.remove('hidden')
-        setTimeout(() => item.classList.add('visible'), 50)
+    const f = btn.dataset.filter
+    cards.forEach(c => {
+      if (f === 'all' || c.dataset.type === f) {
+        c.classList.remove('hidden')
+        requestAnimationFrame(() => c.classList.add('visible'))
       } else {
-        item.classList.add('hidden')
-        item.classList.remove('visible')
+        c.classList.add('hidden')
+        c.classList.remove('visible')
       }
     })
   })
 })
-
-// ============================================================
-// Nav background on scroll
-// ============================================================
-
-const nav = document.getElementById('nav')
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 20)
-}, { passive: true })
