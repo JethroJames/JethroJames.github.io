@@ -1,6 +1,33 @@
 import { prepare, layout } from 'https://esm.sh/@chenglou/pretext'
 
 // ============================================================
+// Loading Screen
+// ============================================================
+
+const loader = document.getElementById('loader')
+
+window.addEventListener('load', () => {
+  setTimeout(() => loader.classList.add('done'), 1600)
+})
+
+// ============================================================
+// WeChat Modal
+// ============================================================
+
+const wechatBtn = document.getElementById('wechatBtn')
+const wechatModal = document.getElementById('wechatModal')
+const modalClose = document.getElementById('modalClose')
+
+wechatBtn.addEventListener('click', () => wechatModal.classList.add('open'))
+modalClose.addEventListener('click', () => wechatModal.classList.remove('open'))
+wechatModal.addEventListener('click', (e) => {
+  if (e.target === wechatModal) wechatModal.classList.remove('open')
+})
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') wechatModal.classList.remove('open')
+})
+
+// ============================================================
 // Pretext Canvas – Research keyword flow in hero background
 // ============================================================
 
@@ -117,7 +144,7 @@ document.querySelectorAll('.nav-links a').forEach(l =>
 )
 
 // ============================================================
-// Scroll Reveal – staggered per batch
+// Scroll Reveal – staggered per batch (news + pub cards)
 // ============================================================
 
 const io = new IntersectionObserver(
@@ -132,6 +159,24 @@ const io = new IntersectionObserver(
   { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
 )
 document.querySelectorAll('.news-item, .pub-card').forEach(el => io.observe(el))
+
+// ============================================================
+// Scroll Reveal – text & card elements with pretext-style blur
+// ============================================================
+
+const textObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        const delay = i * 80
+        setTimeout(() => e.target.classList.add('revealed'), delay)
+        textObserver.unobserve(e.target)
+      }
+    })
+  },
+  { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+)
+document.querySelectorAll('.reveal-text, .about-card, .contact-card').forEach(el => textObserver.observe(el))
 
 // ============================================================
 // Publication Filtering

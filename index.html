@@ -16,6 +16,27 @@
 </head>
 <body>
 
+  <!-- Loading Screen -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-line"></div>
+      <div class="loader-text">
+        <span class="loader-char">H</span><span class="loader-char">a</span><span class="loader-char">o</span><span class="loader-char">j</span><span class="loader-char">i</span><span class="loader-char">a</span><span class="loader-char">n</span><span class="loader-char">&nbsp;</span><span class="loader-char">H</span><span class="loader-char">u</span><span class="loader-char">a</span><span class="loader-char">n</span><span class="loader-char">g</span>
+      </div>
+      <div class="loader-sub">Embodied AI · Agentic System · Video Reasoning</div>
+    </div>
+  </div>
+
+  <!-- WeChat QR Modal -->
+  <div class="modal-overlay" id="wechatModal">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+      <h3 class="modal-title">WeChat · 微信</h3>
+      <img src="Wechat.jpg" alt="WeChat QR Code" class="modal-qr">
+      <p class="modal-hint">Scan to connect</p>
+    </div>
+  </div>
+
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a href="#" class="nav-logo">H. Huang</a>
@@ -64,6 +85,10 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
             Scholar
           </a>
+          <button class="hero-link wechat-btn" id="wechatBtn" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.295.295a.328.328 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05a6.127 6.127 0 0 1-.233-1.678c0-3.554 3.195-6.436 7.13-6.436.259 0 .51.022.762.044C16.463 4.715 12.917 2.188 8.691 2.188zM5.785 7.119a1.028 1.028 0 1 1 0-2.056 1.028 1.028 0 0 1 0 2.056zm5.813 0a1.028 1.028 0 1 1 0-2.056 1.028 1.028 0 0 1 0 2.056zm4.56 11.237c-3.457 0-6.267-2.529-6.267-5.654 0-3.125 2.81-5.654 6.267-5.654 3.458 0 6.267 2.529 6.267 5.654 0 3.125-2.81 5.654-6.267 5.654zm-2.87-6.34a.856.856 0 1 1 0-1.712.856.856 0 0 1 0 1.712zm5.74 0a.856.856 0 1 1 0-1.712.856.856 0 0 1 0 1.712z"/></svg>
+            WeChat
+          </button>
         </div>
       </div>
       <div class="hero-avatar">
@@ -78,17 +103,17 @@
 
     <section class="section" id="about">
       <div class="container">
-        <h2 class="section-title">About</h2>
+        <h2 class="section-title reveal-text">About</h2>
         <div class="about-grid">
           <div class="bio">
-            <p>
+            <p class="reveal-text">
               Haojian Huang is currently an <strong>Embodied AI Algorithm Researcher</strong> at <strong>Knowin</strong>,
               focusing on <strong>Embodied AI</strong> and <strong>Agentic Systems</strong>, dedicated to building
               more interactive and reliable agent-based solutions.
               He received his M.Sc. in Computer Science from The University of Hong Kong, and has published
               at top-tier venues such as ICML, NeurIPS, and AAAI.
             </p>
-            <p>
+            <p class="reveal-text">
               We are looking for like-minded partners to join our team. If you are passionate about embodied intelligence
               and believe that <strong>robots will eventually enter every household</strong>, whether you are an undergraduate
               or a master's student, feel free to reach out for research collaboration.
@@ -112,7 +137,7 @@
 
     <section class="section section-alt" id="news">
       <div class="container">
-        <h2 class="section-title">News</h2>
+        <h2 class="section-title reveal-text">News</h2>
         <div class="news-timeline">
           <div class="news-item"><span class="news-date">2025.12</span><span class="news-badge badge-conf">AAAI 2026</span><p>Two papers accepted to <strong>AAAI 2026</strong>.</p></div>
           <div class="news-item"><span class="news-date">2025.09</span><span class="news-badge badge-conf">ICML 2025</span><p>One paper accepted to <strong>ICML 2025</strong>.</p></div>
@@ -128,8 +153,8 @@
 
     <section class="section" id="publications">
       <div class="container">
-        <h2 class="section-title">Selected Publications</h2>
-        <p class="section-subtitle">Full list on <a href="https://scholar.google.com/citations?user=ab5uUAcAAAAJ" target="_blank">Google Scholar</a>.</p>
+        <h2 class="section-title reveal-text">Selected Publications</h2>
+        <p class="section-subtitle reveal-text">Full list on <a href="https://scholar.google.com/citations?user=ab5uUAcAAAAJ" target="_blank">Google Scholar</a>.</p>
 
         <div class="pub-filters">
           <button class="pub-filter active" data-filter="all">All</button>
@@ -302,7 +327,7 @@
 
     <section class="section section-alt" id="contact">
       <div class="container">
-        <h2 class="section-title">Contact</h2>
+        <h2 class="section-title reveal-text">Contact</h2>
         <div class="contact-grid">
           <div class="contact-card">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
