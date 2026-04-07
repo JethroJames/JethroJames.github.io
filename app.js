@@ -186,6 +186,17 @@ const textObserver = new IntersectionObserver(
 document.querySelectorAll('.reveal-text, .about-card, .contact-card').forEach(el => textObserver.observe(el))
 
 // ============================================================
+// Publication Card Click → Open Paper URL
+// ============================================================
+
+document.querySelectorAll('.pub-card[data-url]').forEach(card => {
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('.pub-link')) return
+    window.open(card.dataset.url, '_blank')
+  })
+})
+
+// ============================================================
 // Publication Filtering
 // ============================================================
 

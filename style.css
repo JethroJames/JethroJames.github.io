@@ -785,6 +785,7 @@ a:hover { color: var(--link-hover); }
   transform: translateY(-3px);
 }
 .pub-card.visible:hover { transform: translateY(-3px); }
+.pub-card[data-url] { cursor: pointer; }
 
 /* --- Banners --- */
 .pub-banner {
