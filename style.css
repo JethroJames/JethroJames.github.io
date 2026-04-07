@@ -159,10 +159,10 @@ a:hover { color: var(--link-hover); }
 /* ===== HERO ===== */
 .hero {
   position: relative;
-  min-height: 88vh;
+  min-height: auto;
   display: flex;
   align-items: center;
-  padding: calc(var(--nav-height) + 16px) 0 20px;
+  padding: calc(var(--nav-height) + 40px) 0 40px;
   overflow: hidden;
 }
 .hero-bg {
