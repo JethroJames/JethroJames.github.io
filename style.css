@@ -64,15 +64,17 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.25;
+    radial-gradient(circle at 20% 30%, rgba(91,181,197,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(91,181,197,0.06) 0%, transparent 50%),
+    linear-gradient(rgba(91,181,197,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91,181,197,0.06) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
+  opacity: 0.6;
   animation: gridPulse 4s ease-in-out infinite;
 }
 @keyframes gridPulse {
-  0%,100% { opacity: 0.15; }
-  50% { opacity: 0.3; }
+  0%,100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
 }
 .loader-inner {
   text-align: center;
@@ -88,26 +90,26 @@
 }
 .robot {
   color: var(--text);
-  filter: drop-shadow(0 0 20px rgba(179,27,27,0.15));
+  filter: drop-shadow(0 4px 16px rgba(91,181,197,0.25));
   animation: robotBob 1.2s ease-in-out infinite;
 }
 [data-theme="dark"] .robot {
-  filter: drop-shadow(0 0 24px rgba(255,107,107,0.2));
+  filter: drop-shadow(0 4px 20px rgba(91,181,197,0.3));
 }
 @keyframes robotBob {
   0%,100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
 .robot-shadow {
-  width: 80px;
-  height: 10px;
-  background: radial-gradient(ellipse, rgba(0,0,0,0.15) 0%, transparent 70%);
+  width: 90px;
+  height: 12px;
+  background: radial-gradient(ellipse, rgba(91,181,197,0.2) 0%, transparent 70%);
   border-radius: 50%;
-  margin: -4px auto 0;
+  margin: -6px auto 0;
   animation: shadowPulse 1.2s ease-in-out infinite;
 }
 [data-theme="dark"] .robot-shadow {
-  background: radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(91,181,197,0.12) 0%, transparent 70%);
 }
 @keyframes shadowPulse {
   0%,100% { transform: scaleX(1); opacity: 0.7; }
@@ -115,27 +117,29 @@
 }
 
 .robot-antenna-dot {
-  animation: antennaBlink 2s ease-in-out infinite;
+  animation: antennaBlink 2.5s ease-in-out infinite;
 }
 @keyframes antennaBlink {
-  0%,80%,100% { opacity: 1; }
-  90% { opacity: 0.2; }
+  0%,70%,100% { opacity: 1; transform: scale(1); }
+  75% { opacity: 0.3; transform: scale(0.7); }
+  80% { opacity: 1; transform: scale(1.2); }
+  85% { opacity: 1; transform: scale(1); }
 }
 
-.robot-eye {
-  animation: eyeGlow 2.5s ease-in-out infinite;
+.robot-eye-l, .robot-eye-r {
+  animation: eyeBlink 4s ease-in-out infinite;
 }
-@keyframes eyeGlow {
-  0%,100% { filter: drop-shadow(0 0 3px var(--accent)); r: 5.5; }
-  50% { filter: drop-shadow(0 0 8px var(--accent)); r: 6; }
+@keyframes eyeBlink {
+  0%,38%,42%,100% { ry: 10; }
+  40% { ry: 1; }
 }
 
 .robot-wink {
-  animation: winkAnim 3.5s ease-in-out infinite;
+  animation: winkAnim 4s ease-in-out infinite;
 }
 @keyframes winkAnim {
-  0%,18%,22%,100% { opacity: 0; }
-  19%,21% { opacity: 1; }
+  0%,68%,74%,100% { opacity: 0; }
+  70%,72% { opacity: 1; }
 }
 
 .robot-arm-r {
@@ -167,18 +171,15 @@
 }
 
 .robot-core {
-  animation: corePulse 2s ease-in-out infinite;
+  animation: heartBeat 1.8s ease-in-out infinite;
+  transform-origin: center;
 }
-@keyframes corePulse {
-  0%,100% { stroke-opacity: 0.6; r: 8; }
-  50% { stroke-opacity: 1; r: 10; }
-}
-.robot-core-dot {
-  animation: coreGlow 2s ease-in-out infinite;
-}
-@keyframes coreGlow {
-  0%,100% { fill-opacity: 0.8; }
-  50% { fill-opacity: 1; filter: drop-shadow(0 0 6px var(--accent)); }
+@keyframes heartBeat {
+  0%,100% { transform: translate(100px,140px) scale(1); }
+  15% { transform: translate(100px,140px) scale(1.2); }
+  30% { transform: translate(100px,140px) scale(1); }
+  45% { transform: translate(100px,140px) scale(1.15); }
+  60% { transform: translate(100px,140px) scale(1); }
 }
 
 /* --- Text --- */
