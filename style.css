@@ -707,6 +707,123 @@ a:hover { color: var(--link-hover); }
 .bio strong { color: var(--text); font-weight: 600; }
 .bio a { border-bottom: 1px solid transparent; }
 .bio a:hover { border-bottom-color: var(--link-hover); }
+.bio-zh {
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 0.88rem !important;
+  color: var(--text-muted) !important;
+}
+
+/* ===== COLLABORATION ===== */
+.collab-section {
+  background: var(--bg-alt);
+}
+.collab-content {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 32px;
+  align-items: start;
+}
+.collab-slogan {
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.collab-slogan strong {
+  color: var(--accent);
+}
+.collab-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.collab-block h3 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.collab-block p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.collab-block ul {
+  list-style: none;
+  padding: 0;
+}
+.collab-block ul li {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  padding-left: 16px;
+  position: relative;
+}
+.collab-block ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.collab-block strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.collab-contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: calc(var(--nav-height) + 20px);
+}
+.collab-contact-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.collab-email {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--link);
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+.collab-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.collab-qr img {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.collab-qr span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+@media (max-width: 768px) {
+  .collab-content {
+    grid-template-columns: 1fr;
+  }
+  .collab-contact-card {
+    position: static;
+  }
+}
 
 .about-sidebar { display: flex; flex-direction: column; gap: 16px; }
 .about-card {

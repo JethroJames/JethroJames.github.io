@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jethrojames.github.io/sitemap.xml
