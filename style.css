@@ -89,97 +89,142 @@
   margin-bottom: 24px;
 }
 .robot {
-  color: var(--text);
-  filter: drop-shadow(0 4px 16px rgba(91,181,197,0.25));
-  animation: robotBob 1.2s ease-in-out infinite;
+  filter: drop-shadow(0 6px 20px rgba(126,207,216,0.3));
+  animation: rBob 2.6s cubic-bezier(0.45,0,0.55,1) infinite;
 }
 [data-theme="dark"] .robot {
-  filter: drop-shadow(0 4px 20px rgba(91,181,197,0.3));
+  filter: drop-shadow(0 6px 24px rgba(126,207,216,0.35));
 }
-@keyframes robotBob {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+@keyframes rBob {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-7px) rotate(0.6deg); }
+  60% { transform: translateY(-2px) rotate(-0.4deg); }
 }
 .robot-shadow {
-  width: 90px;
-  height: 12px;
-  background: radial-gradient(ellipse, rgba(91,181,197,0.2) 0%, transparent 70%);
+  width: 100px;
+  height: 10px;
+  background: radial-gradient(ellipse, rgba(126,207,216,0.22) 0%, transparent 70%);
   border-radius: 50%;
-  margin: -6px auto 0;
-  animation: shadowPulse 1.2s ease-in-out infinite;
+  margin: -4px auto 0;
+  animation: rShadow 2.6s cubic-bezier(0.45,0,0.55,1) infinite;
 }
 [data-theme="dark"] .robot-shadow {
-  background: radial-gradient(ellipse, rgba(91,181,197,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(126,207,216,0.12) 0%, transparent 70%);
 }
-@keyframes shadowPulse {
-  0%,100% { transform: scaleX(1); opacity: 0.7; }
-  50% { transform: scaleX(0.85); opacity: 0.4; }
-}
-
-.robot-antenna-dot {
-  animation: antennaBlink 2.5s ease-in-out infinite;
-}
-@keyframes antennaBlink {
-  0%,70%,100% { opacity: 1; transform: scale(1); }
-  75% { opacity: 0.3; transform: scale(0.7); }
-  80% { opacity: 1; transform: scale(1.2); }
-  85% { opacity: 1; transform: scale(1); }
+@keyframes rShadow {
+  0%,100% { transform: scaleX(1); opacity: 0.6; }
+  30% { transform: scaleX(0.88); opacity: 0.35; }
+  60% { transform: scaleX(0.95); opacity: 0.5; }
 }
 
-.robot-eye-l, .robot-eye-r {
-  animation: eyeBlink 4s ease-in-out infinite;
+/* antenna glow */
+.r-ant {
+  animation: rAnt 3s ease-in-out infinite;
 }
-@keyframes eyeBlink {
-  0%,38%,42%,100% { ry: 10; }
-  40% { ry: 1; }
-}
-
-.robot-wink {
-  animation: winkAnim 4s ease-in-out infinite;
-}
-@keyframes winkAnim {
-  0%,68%,74%,100% { opacity: 0; }
-  70%,72% { opacity: 1; }
+@keyframes rAnt {
+  0%,100% { opacity: 0.6; r: 5.5; }
+  50% { opacity: 1; r: 6.5; }
 }
 
-.robot-arm-r {
-  transform-origin: 156px 96px;
-  animation: armWave 2.4s ease-in-out infinite;
+/* left eye: blink only */
+.r-eye-l {
+  transform-origin: 84px 60px;
+  animation: rBlinkL 4.5s ease-in-out infinite;
 }
-@keyframes armWave {
-  0%,40%,100% { transform: rotate(0deg); }
-  10% { transform: rotate(-25deg); }
-  20% { transform: rotate(-15deg); }
-  30% { transform: rotate(-25deg); }
+@keyframes rBlinkL {
+  0%,29%,33%,100% { transform: scaleY(1); }
+  31% { transform: scaleY(0.05); }
 }
 
-.robot-leg-l {
-  transform-origin: 79px 162px;
-  animation: legWalkL 1.2s ease-in-out infinite;
+/* right eye: blink together with left, then wink alone later */
+.r-eye-r {
+  transform-origin: 116px 60px;
+  animation: rBlinkR 4.5s ease-in-out infinite;
 }
-.robot-leg-r {
-  transform-origin: 121px 162px;
-  animation: legWalkR 1.2s ease-in-out infinite;
+@keyframes rBlinkR {
+  0%,29%,33%,100% { transform: scaleY(1); }
+  31% { transform: scaleY(0.05); }
+  62% { transform: scaleY(1); }
+  64% { transform: scaleY(0.08); }
+  66% { transform: scaleY(0.5); }
+  68% { transform: scaleY(0.08); }
+  71% { transform: scaleY(1); }
 }
-@keyframes legWalkL {
-  0%,100% { transform: rotate(3deg); }
-  50% { transform: rotate(-3deg); }
+
+/* head subtle tilt */
+.r-head {
+  transform-origin: 100px 62px;
+  animation: rHeadTilt 4s ease-in-out infinite;
 }
-@keyframes legWalkR {
-  0%,100% { transform: rotate(-3deg); }
+@keyframes rHeadTilt {
+  0%,100% { transform: rotate(0deg); }
+  25% { transform: rotate(1.5deg); }
+  75% { transform: rotate(-1deg); }
+}
+
+/* body breathe */
+.r-body {
+  transform-origin: 100px 155px;
+  animation: rBreathe 3.5s ease-in-out infinite;
+}
+@keyframes rBreathe {
+  0%,100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(1.02) scaleX(0.99); }
+}
+
+/* heart beat */
+.r-heart {
+  animation: rHeart 2s ease-in-out infinite;
+}
+@keyframes rHeart {
+  0%,100% { transform: translate(100px,138px) scale(1); opacity: 0.55; }
+  12% { transform: translate(100px,138px) scale(1.18); opacity: 0.75; }
+  24% { transform: translate(100px,138px) scale(1); opacity: 0.55; }
+  36% { transform: translate(100px,138px) scale(1.12); opacity: 0.65; }
+  48% { transform: translate(100px,138px) scale(1); opacity: 0.55; }
+}
+
+/* left arm wave */
+.r-arm-l {
+  transform-origin: 54px 112px;
+  animation: rWave 3.2s ease-in-out infinite;
+}
+@keyframes rWave {
+  0%,50%,100% { transform: rotate(0deg); }
+  58% { transform: rotate(-22deg); }
+  64% { transform: rotate(-14deg); }
+  70% { transform: rotate(-22deg); }
+  76% { transform: rotate(-14deg); }
+  84% { transform: rotate(-22deg); }
+  92% { transform: rotate(0deg); }
+}
+
+/* right arm gentle sway */
+.r-arm-r {
+  transform-origin: 146px 112px;
+  animation: rArmR 2.6s ease-in-out infinite;
+}
+@keyframes rArmR {
+  0%,100% { transform: rotate(0deg); }
   50% { transform: rotate(3deg); }
 }
 
-.robot-core {
-  animation: heartBeat 1.8s ease-in-out infinite;
-  transform-origin: center;
+/* legs walk */
+.r-leg-l {
+  transform-origin: 82px 175px;
+  animation: rLegL 1.6s ease-in-out infinite;
 }
-@keyframes heartBeat {
-  0%,100% { transform: translate(100px,140px) scale(1); }
-  15% { transform: translate(100px,140px) scale(1.2); }
-  30% { transform: translate(100px,140px) scale(1); }
-  45% { transform: translate(100px,140px) scale(1.15); }
-  60% { transform: translate(100px,140px) scale(1); }
+.r-leg-r {
+  transform-origin: 118px 175px;
+  animation: rLegR 1.6s ease-in-out infinite;
+}
+@keyframes rLegL {
+  0%,100% { transform: rotate(2.5deg); }
+  50% { transform: rotate(-2.5deg); }
+}
+@keyframes rLegR {
+  0%,100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg); }
 }
 
 /* --- Text --- */
