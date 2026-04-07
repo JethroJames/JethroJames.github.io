@@ -5,17 +5,29 @@ import { prepare, layout } from 'https://esm.sh/@chenglou/pretext'
 // ============================================================
 
 const loader = document.getElementById('loader')
+const LOADER_SOFT_DELAY_MS = 1400
+const LOADER_HARD_TIMEOUT_MS = 4200
 
 function dismissLoader() {
-  if (!loader.classList.contains('done')) {
+  if (loader && !loader.classList.contains('done')) {
     loader.classList.add('done')
   }
 }
 
-loader.addEventListener('click', dismissLoader)
-window.addEventListener('load', () => {
-  setTimeout(dismissLoader, 3200)
-})
+if (loader) {
+  loader.addEventListener('click', dismissLoader)
+
+  const scheduleDismiss = (delay) => setTimeout(dismissLoader, delay)
+
+  if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    scheduleDismiss(LOADER_SOFT_DELAY_MS)
+  } else {
+    window.addEventListener('DOMContentLoaded', () => scheduleDismiss(LOADER_SOFT_DELAY_MS), { once: true })
+  }
+
+  window.addEventListener('load', () => scheduleDismiss(500), { once: true })
+  scheduleDismiss(LOADER_HARD_TIMEOUT_MS)
+}
 
 // ============================================================
 // WeChat Modal
@@ -26,6 +38,8 @@ const wechatModal = document.getElementById('wechatModal')
 const modalClose = document.getElementById('modalClose')
 
 wechatBtn.addEventListener('click', () => wechatModal.classList.add('open'))
+const collabWechatBtn = document.getElementById('collabWechatBtn')
+if (collabWechatBtn) collabWechatBtn.addEventListener('click', () => wechatModal.classList.add('open'))
 modalClose.addEventListener('click', () => wechatModal.classList.remove('open'))
 wechatModal.addEventListener('click', (e) => {
   if (e.target === wechatModal) wechatModal.classList.remove('open')
