@@ -564,8 +564,7 @@ a:hover { color: var(--link-hover); }
   border-radius: 100px;
   color: var(--text-secondary);
   transition: all var(--transition);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 .pub-link:hover {
   border-color: var(--accent);
