@@ -6,8 +6,15 @@ import { prepare, layout } from 'https://esm.sh/@chenglou/pretext'
 
 const loader = document.getElementById('loader')
 
+function dismissLoader() {
+  if (!loader.classList.contains('done')) {
+    loader.classList.add('done')
+  }
+}
+
+loader.addEventListener('click', dismissLoader)
 window.addEventListener('load', () => {
-  setTimeout(() => loader.classList.add('done'), 1600)
+  setTimeout(dismissLoader, 3200)
 })
 
 // ============================================================

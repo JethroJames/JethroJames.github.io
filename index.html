@@ -18,12 +18,59 @@
 
   <!-- Loading Screen -->
   <div class="loader" id="loader">
+    <div class="loader-grid"></div>
     <div class="loader-inner">
-      <div class="loader-line"></div>
+      <div class="robot-scene">
+        <svg class="robot" viewBox="0 0 200 240" width="140" height="168" xmlns="http://www.w3.org/2000/svg">
+          <!-- antenna -->
+          <line class="robot-antenna" x1="100" y1="28" x2="100" y2="8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <circle class="robot-antenna-dot" cx="100" cy="6" r="4" fill="var(--accent)"/>
+          <!-- head -->
+          <rect class="robot-head" x="62" y="28" width="76" height="52" rx="14" fill="currentColor" opacity="0.12" stroke="currentColor" stroke-width="2"/>
+          <!-- visor -->
+          <rect class="robot-visor" x="72" y="40" width="56" height="22" rx="11" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <!-- eyes -->
+          <circle class="robot-eye robot-eye-l" cx="88" cy="51" r="5.5" fill="var(--accent)"/>
+          <circle class="robot-eye robot-eye-r" cx="112" cy="51" r="5.5" fill="var(--accent)"/>
+          <!-- wink lid (hidden by default) -->
+          <rect class="robot-wink" x="106" y="48.5" width="13" height="5" rx="2.5" fill="currentColor" opacity="0"/>
+          <!-- mouth -->
+          <path class="robot-mouth" d="M90 64 Q100 70 110 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
+          <!-- neck -->
+          <rect x="92" y="80" width="16" height="10" rx="4" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+          <!-- body -->
+          <rect class="robot-body" x="56" y="90" width="88" height="72" rx="16" fill="currentColor" opacity="0.1" stroke="currentColor" stroke-width="2"/>
+          <!-- chest light -->
+          <circle class="robot-core" cx="100" cy="122" r="8" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <circle class="robot-core-dot" cx="100" cy="122" r="3.5" fill="var(--accent)"/>
+          <!-- left arm -->
+          <g class="robot-arm-l">
+            <rect x="32" y="96" width="24" height="48" rx="12" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="44" cy="150" r="7" fill="currentColor" opacity="0.06" stroke="currentColor" stroke-width="1.5"/>
+          </g>
+          <!-- right arm (waving) -->
+          <g class="robot-arm-r">
+            <rect x="144" y="96" width="24" height="48" rx="12" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="156" cy="150" r="7" fill="currentColor" opacity="0.06" stroke="currentColor" stroke-width="1.5"/>
+          </g>
+          <!-- left leg -->
+          <g class="robot-leg-l">
+            <rect x="68" y="162" width="22" height="50" rx="11" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="64" y="210" width="30" height="14" rx="7" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+          </g>
+          <!-- right leg -->
+          <g class="robot-leg-r">
+            <rect x="110" y="162" width="22" height="50" rx="11" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="106" y="210" width="30" height="14" rx="7" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.5"/>
+          </g>
+        </svg>
+        <div class="robot-shadow"></div>
+      </div>
       <div class="loader-text">
         <span class="loader-char">H</span><span class="loader-char">a</span><span class="loader-char">o</span><span class="loader-char">j</span><span class="loader-char">i</span><span class="loader-char">a</span><span class="loader-char">n</span><span class="loader-char">&nbsp;</span><span class="loader-char">H</span><span class="loader-char">u</span><span class="loader-char">a</span><span class="loader-char">n</span><span class="loader-char">g</span>
       </div>
       <div class="loader-sub">Embodied AI · Agentic System · Video Reasoning</div>
+      <div class="loader-skip">Click anywhere to enter</div>
     </div>
   </div>
 
