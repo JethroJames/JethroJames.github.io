@@ -508,15 +508,6 @@ a:hover { color: var(--link-hover); }
   z-index: 1;
 }
 
-.banner-nlp {
-  background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
-}
-.banner-video {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-.banner-trusted {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-}
 
 .pub-venue-badge {
   position: relative;
