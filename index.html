@@ -81,17 +81,18 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
-  scene.fog = new THREE.FogExp2(0x000000, 0.0006);
+  scene.background = new THREE.Color(0x050302);
+  scene.fog = new THREE.FogExp2(0x050302, 0.00045);
 
-  const cam = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2500);
+  const cam = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 3000);
   cam.position.z = 0;
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, cam));
-  composer.addPass(new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight), 0.6, 1.2, 0.25
-  ));
+  const bloom = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight), 0.85, 0.8, 0.15
+  );
+  composer.addPass(bloom);
 
   function makeGlowTexture(size) {
     const c = document.createElement('canvas');
@@ -99,11 +100,11 @@
     const g = c.getContext('2d');
     const half = size / 2;
     const grad = g.createRadialGradient(half, half, 0, half, half, half);
-    grad.addColorStop(0, 'rgba(180,195,220,0.6)');
-    grad.addColorStop(0.04, 'rgba(160,175,210,0.35)');
-    grad.addColorStop(0.12, 'rgba(120,140,180,0.12)');
-    grad.addColorStop(0.3, 'rgba(80,100,150,0.03)');
-    grad.addColorStop(0.6, 'rgba(40,55,90,0.008)');
+    grad.addColorStop(0, 'rgba(255,220,160,0.7)');
+    grad.addColorStop(0.03, 'rgba(255,200,130,0.45)');
+    grad.addColorStop(0.1, 'rgba(220,170,100,0.18)');
+    grad.addColorStop(0.25, 'rgba(180,120,60,0.06)');
+    grad.addColorStop(0.5, 'rgba(100,60,25,0.015)');
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     g.fillStyle = grad;
     g.fillRect(0, 0, size, size);
@@ -111,89 +112,158 @@
   }
   const glowTex = makeGlowTexture(512);
 
-  // Star field — camera flies through this tunnel of stars
-  const DEPTH = 1500;
-  const SPREAD = 500;
-  const N = 6000;
+  function makeWarmGlow(size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const g = c.getContext('2d');
+    const half = size / 2;
+    const grad = g.createRadialGradient(half, half, 0, half, half, half);
+    grad.addColorStop(0, 'rgba(255,240,200,0.9)');
+    grad.addColorStop(0.02, 'rgba(255,210,150,0.5)');
+    grad.addColorStop(0.08, 'rgba(240,180,100,0.2)');
+    grad.addColorStop(0.2, 'rgba(200,130,50,0.06)');
+    grad.addColorStop(0.45, 'rgba(120,70,20,0.012)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+  }
+  const warmGlow = makeWarmGlow(512);
+
+  const DEPTH = 1800;
+  const SPREAD = 600;
+  const N = 7000;
   const geo = new THREE.BufferGeometry();
   const pos = new Float32Array(N * 3);
   const sizes = new Float32Array(N);
+  const warmths = new Float32Array(N);
   for (let i = 0; i < N; i++) {
     pos[i*3]     = (Math.random() - 0.5) * SPREAD;
     pos[i*3 + 1] = (Math.random() - 0.5) * SPREAD;
     pos[i*3 + 2] = -Math.random() * DEPTH;
     const r = Math.random();
-    sizes[i] = r < 0.7 ? 0.3 + r * 1.5 : 1.0 + r * 2.5;
+    sizes[i] = r < 0.7 ? 0.3 + r * 1.8 : 1.2 + r * 3.0;
+    warmths[i] = 0.3 + Math.random() * 0.7;
   }
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  geo.setAttribute('warmth', new THREE.BufferAttribute(warmths, 1));
 
   const starMat = new THREE.ShaderMaterial({
     uniforms: { uTex: {value: glowTex}, uTime: {value: 0} },
     vertexShader: `
       attribute float size;
+      attribute float warmth;
       uniform float uTime;
       varying float vAlpha;
+      varying float vWarmth;
       void main(){
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
         float dist = -mv.z;
-        gl_PointSize = size * (400.0 / dist);
+        gl_PointSize = size * (450.0 / dist);
         gl_Position = projectionMatrix * mv;
-        vAlpha = smoothstep(1200.0, 100.0, dist) * (0.5 + 0.2 * sin(uTime * 0.5 + position.x * 0.3));
+        vAlpha = smoothstep(1600.0, 80.0, dist) * (0.55 + 0.25 * sin(uTime * 0.6 + position.x * 0.4 + position.y * 0.3));
+        vWarmth = warmth;
       }
     `,
     fragmentShader: `
       uniform sampler2D uTex;
       varying float vAlpha;
+      varying float vWarmth;
       void main(){
         vec4 tex = texture2D(uTex, gl_PointCoord);
-        gl_FragColor = vec4(tex.rgb * 0.85, tex.a * vAlpha);
+        vec3 warm = vec3(1.0, 0.85 + vWarmth * 0.1, 0.6 + vWarmth * 0.15);
+        gl_FragColor = vec4(tex.rgb * warm, tex.a * vAlpha);
       }
     `,
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
   });
   scene.add(new THREE.Points(geo, starMat));
 
-  const heroColors = [0xb8c8e0, 0xa0b8d8, 0xc8d0e8, 0x90a8c8, 0xd0d8f0, 0xb0c0d0, 0xa8b8d0, 0xc0c8e0];
+  // Streaming dust trails for dynamism
+  const DUST_N = 2000;
+  const dustGeo = new THREE.BufferGeometry();
+  const dustPos = new Float32Array(DUST_N * 3);
+  const dustSizes = new Float32Array(DUST_N);
+  for (let i = 0; i < DUST_N; i++) {
+    dustPos[i*3]     = (Math.random() - 0.5) * SPREAD * 1.2;
+    dustPos[i*3 + 1] = (Math.random() - 0.5) * SPREAD * 1.2;
+    dustPos[i*3 + 2] = -Math.random() * DEPTH;
+    dustSizes[i] = 0.1 + Math.random() * 0.6;
+  }
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+  dustGeo.setAttribute('size', new THREE.BufferAttribute(dustSizes, 1));
+  const dustMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: {value: 0} },
+    vertexShader: `
+      attribute float size;
+      uniform float uTime;
+      varying float vA;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        float dist = -mv.z;
+        gl_PointSize = size * (200.0 / dist);
+        gl_Position = projectionMatrix * mv;
+        vA = smoothstep(1600.0, 100.0, dist) * 0.3 * (0.5 + 0.5 * sin(uTime * 1.2 + position.z * 0.02));
+      }
+    `,
+    fragmentShader: `
+      varying float vA;
+      void main(){
+        float d = length(gl_PointCoord - 0.5) * 2.0;
+        float a = smoothstep(1.0, 0.3, d) * vA;
+        gl_FragColor = vec4(0.9, 0.7, 0.4, a);
+      }
+    `,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  });
+  scene.add(new THREE.Points(dustGeo, dustMat));
+
+  const heroColors = [0xffd080, 0xffb860, 0xffe0a0, 0xf0a840, 0xffc870, 0xffa830, 0xffe8b0, 0xf0c060];
   const heroData = [
-    {x: -35, y: 18,  z: -100, s: 60},
-    {x: 55,  y: -12, z: -250, s: 80},
-    {x: -18, y: -40, z: -450, s: 110},
-    {x: 75,  y: 35,  z: -650, s: 130},
-    {x: -65, y: -8,  z: -380, s: 75},
-    {x: 25,  y: 45,  z: -180, s: 50},
-    {x: -85, y: -28, z: -550, s: 95},
-    {x: 45,  y: -45, z: -750, s: 120},
+    {x: -40, y: 20,  z: -120, s: 80},
+    {x: 60,  y: -15, z: -300, s: 110},
+    {x: -20, y: -45, z: -500, s: 140},
+    {x: 80,  y: 40,  z: -700, s: 170},
+    {x: -70, y: -10, z: -420, s: 95},
+    {x: 30,  y: 50,  z: -200, s: 65},
+    {x: -90, y: -30, z: -600, s: 120},
+    {x: 50,  y: -50, z: -850, s: 150},
   ];
   const heroSprites = [];
   heroData.forEach((h, i) => {
+    const tex = i % 2 === 0 ? warmGlow : glowTex;
     const mat = new THREE.SpriteMaterial({
-      map: glowTex, color: heroColors[i], transparent: true,
-      blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.45
+      map: tex, color: heroColors[i], transparent: true,
+      blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.55
     });
     const sp = new THREE.Sprite(mat);
     sp.position.set(h.x, h.y, h.z);
     sp.scale.set(h.s, h.s, 1);
     scene.add(sp);
-    heroSprites.push({sprite: sp, baseZ: h.z, size: h.s, phase: Math.random() * 6.28, baseOp: 0.45});
+    heroSprites.push({sprite: sp, baseZ: h.z, size: h.s, phase: Math.random() * 6.28, baseOp: 0.55});
   });
 
   const nebData = [
-    {x: -120, y: 60,  z: -500, s: 500, a: 0.06, c: 0x1a1a3a},
-    {x: 100,  y: -40, z: -700, s: 600, a: 0.05, c: 0x1a1028},
-    {x: -50,  y: -70, z: -900, s: 700, a: 0.04, c: 0x121230},
-    {x: 60,   y: 80,  z: -400, s: 450, a: 0.035, c: 0x181835},
-    {x: -90,  y: -20, z: -1000,s: 800, a: 0.03, c: 0x0f0f25},
+    {x: -140, y: 70,  z: -500, s: 600, a: 0.08, c: 0x3a2010},
+    {x: 120,  y: -50, z: -750, s: 700, a: 0.06, c: 0x301810},
+    {x: -60,  y: -80, z: -950, s: 800, a: 0.05, c: 0x281408},
+    {x: 70,   y: 90,  z: -400, s: 550, a: 0.045, c: 0x352518},
+    {x: -100, y: -25, z: -1100,s: 900, a: 0.035, c: 0x201008},
+    {x: 40,   y: -100,z: -600, s: 650, a: 0.04, c: 0x2a1a0f},
+    {x: -30,  y: 110, z: -850, s: 750, a: 0.03, c: 0x1f1208},
   ];
+  const nebSprites = [];
   nebData.forEach(n => {
     const mat = new THREE.SpriteMaterial({
-      map: glowTex, color: n.c, transparent: true,
+      map: warmGlow, color: n.c, transparent: true,
       blending: THREE.AdditiveBlending, depthWrite: false, opacity: n.a
     });
     const sp = new THREE.Sprite(mat);
     sp.position.set(n.x, n.y, n.z);
     sp.scale.set(n.s, n.s, 1);
     scene.add(sp);
+    nebSprites.push({sprite: sp, baseA: n.a, phase: Math.random() * 6.28});
   });
 
   let mouseX = 0, mouseY = 0;
@@ -204,19 +274,24 @@
 
   const clock = new THREE.Clock();
   let alive = true;
-  const speed = 20;
+  const baseSpeed = 35;
 
   function tick() {
     if (!alive) return;
     const t = clock.getElapsedTime();
     const dt = clock.getDelta();
     starMat.uniforms.uTime.value = t;
+    dustMat.uniforms.uTime.value = t;
 
+    const speed = baseSpeed + 8 * Math.sin(t * 0.15);
     cam.position.z -= speed * dt;
 
-    cam.position.x += (mouseX * 8 - cam.position.x) * 0.006;
-    cam.position.y += (-mouseY * 6 - cam.position.y) * 0.006;
-    cam.rotation.z = mouseX * -0.012;
+    const spiralR = 3;
+    const targetX = mouseX * 12 + Math.sin(t * 0.1) * spiralR;
+    const targetY = -mouseY * 9 + Math.cos(t * 0.08) * spiralR;
+    cam.position.x += (targetX - cam.position.x) * 0.008;
+    cam.position.y += (targetY - cam.position.y) * 0.008;
+    cam.rotation.z = mouseX * -0.015 + Math.sin(t * 0.06) * 0.008;
 
     const pa = geo.attributes.position.array;
     for (let i = 0; i < N; i++) {
@@ -228,17 +303,34 @@
     }
     geo.attributes.position.needsUpdate = true;
 
-    heroSprites.forEach(h => {
-      if (h.sprite.position.z > cam.position.z + 60) {
-        h.sprite.position.z = cam.position.z - 600 - Math.random() * 400;
-        h.sprite.position.x = cam.position.x + (Math.random() - 0.5) * SPREAD * 0.6;
-        h.sprite.position.y = cam.position.y + (Math.random() - 0.5) * SPREAD * 0.6;
+    const dpa = dustGeo.attributes.position.array;
+    for (let i = 0; i < DUST_N; i++) {
+      if (dpa[i*3+2] > cam.position.z + 15) {
+        dpa[i*3]     = cam.position.x + (Math.random() - 0.5) * SPREAD * 1.2;
+        dpa[i*3 + 1] = cam.position.y + (Math.random() - 0.5) * SPREAD * 1.2;
+        dpa[i*3 + 2] = cam.position.z - DEPTH + Math.random() * 40;
       }
-      const pulse = 0.92 + 0.08 * Math.sin(t * 0.3 + h.phase);
-      h.sprite.material.opacity = (h.baseOp || 0.45) * pulse;
-      const sc = h.size * (0.97 + 0.03 * Math.sin(t * 0.2 + h.phase));
+    }
+    dustGeo.attributes.position.needsUpdate = true;
+
+    heroSprites.forEach(h => {
+      if (h.sprite.position.z > cam.position.z + 80) {
+        h.sprite.position.z = cam.position.z - 700 - Math.random() * 500;
+        h.sprite.position.x = cam.position.x + (Math.random() - 0.5) * SPREAD * 0.7;
+        h.sprite.position.y = cam.position.y + (Math.random() - 0.5) * SPREAD * 0.7;
+      }
+      const pulse = 0.88 + 0.12 * Math.sin(t * 0.4 + h.phase);
+      h.sprite.material.opacity = (h.baseOp || 0.55) * pulse;
+      const sc = h.size * (0.95 + 0.05 * Math.sin(t * 0.25 + h.phase));
       h.sprite.scale.set(sc, sc, 1);
     });
+
+    nebSprites.forEach(n => {
+      const breathe = 0.85 + 0.15 * Math.sin(t * 0.12 + n.phase);
+      n.sprite.material.opacity = n.baseA * breathe;
+    });
+
+    bloom.strength = 0.85 + 0.1 * Math.sin(t * 0.18);
 
     composer.render();
     requestAnimationFrame(tick);
