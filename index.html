@@ -71,143 +71,90 @@
   <script type="importmap">{"imports":{"three":"https://esm.sh/three@0.170.0"}}</script>
   <script type="module">
   import * as THREE from 'three';
+
   const canvas = document.getElementById('cosmosCanvas');
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: false});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
 
   const scene = new THREE.Scene();
-  const cam = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-  cam.position.z = 5;
+  scene.background = new THREE.Color(0x000000);
+  scene.fog = new THREE.FogExp2(0x000000, 0.035);
 
-  // Deep space gradient background
-  const bgCanvas = document.createElement('canvas');
-  bgCanvas.width = 2; bgCanvas.height = 512;
-  const bgCtx = bgCanvas.getContext('2d');
-  const grad = bgCtx.createLinearGradient(0, 0, 0, 512);
-  grad.addColorStop(0, '#000814');
-  grad.addColorStop(0.35, '#001d3d');
-  grad.addColorStop(0.65, '#000a1a');
-  grad.addColorStop(1, '#000000');
-  bgCtx.fillStyle = grad;
-  bgCtx.fillRect(0, 0, 2, 512);
-  scene.background = new THREE.CanvasTexture(bgCanvas);
+  const cam = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 200);
+  cam.position.set(0, 0, 8);
 
-  // Star field — thousands of tiny stars
-  const STAR_COUNT = 6000;
-  const starGeo = new THREE.BufferGeometry();
-  const starPos = new Float32Array(STAR_COUNT * 3);
-  const starSizes = new Float32Array(STAR_COUNT);
-  for (let i = 0; i < STAR_COUNT; i++) {
-    starPos[i * 3]     = (Math.random() - 0.5) * 600;
-    starPos[i * 3 + 1] = (Math.random() - 0.5) * 600;
-    starPos[i * 3 + 2] = (Math.random() - 0.5) * 600;
-    starSizes[i] = 0.5 + Math.random() * 2.5;
+  // Minimal starfield — sparse, elegant dots
+  const STARS = 800;
+  const sGeo = new THREE.BufferGeometry();
+  const sPos = new Float32Array(STARS * 3);
+  for (let i = 0; i < STARS; i++) {
+    sPos[i*3]   = (Math.random() - 0.5) * 80;
+    sPos[i*3+1] = (Math.random() - 0.5) * 80;
+    sPos[i*3+2] = (Math.random() - 0.5) * 80;
   }
-  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-  starGeo.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
-
-  const starMat = new THREE.ShaderMaterial({
-    uniforms: { uTime: {value: 0} },
-    vertexShader: `
-      attribute float size;
-      uniform float uTime;
-      varying float vAlpha;
-      void main(){
-        vec4 mv = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (150.0 / -mv.z);
-        gl_Position = projectionMatrix * mv;
-        vAlpha = 0.4 + 0.6 * sin(uTime * 0.8 + position.x * 0.1 + position.y * 0.1);
-      }
-    `,
-    fragmentShader: `
-      varying float vAlpha;
-      void main(){
-        float d = length(gl_PointCoord - 0.5);
-        if(d > 0.5) discard;
-        float glow = exp(-d * 6.0);
-        gl_FragColor = vec4(0.85, 0.9, 1.0, glow * vAlpha);
-      }
-    `,
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  sGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
+  const sMat = new THREE.PointsMaterial({
+    color: 0xffffff, size: 0.04, sizeAttenuation: true,
+    transparent: true, opacity: 0.5
   });
-  const stars = new THREE.Points(starGeo, starMat);
-  scene.add(stars);
+  scene.add(new THREE.Points(sGeo, sMat));
 
-  // Nebula particle clouds
-  const NEBULA_COUNT = 1200;
-  const nebGeo = new THREE.BufferGeometry();
-  const nebPos = new Float32Array(NEBULA_COUNT * 3);
-  const nebCol = new Float32Array(NEBULA_COUNT * 3);
-  const nebSize = new Float32Array(NEBULA_COUNT);
-  const palette = [
-    [0.2, 0.35, 0.8],
-    [0.6, 0.2, 0.7],
-    [0.15, 0.5, 0.9],
-    [0.4, 0.15, 0.55],
-    [0.1, 0.3, 0.6],
-  ];
-  for (let i = 0; i < NEBULA_COUNT; i++) {
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    const r = 30 + Math.random() * 120;
-    nebPos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
-    nebPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta) * 0.4;
-    nebPos[i*3+2] = r * Math.cos(phi);
-    const c = palette[Math.floor(Math.random() * palette.length)];
-    nebCol[i*3] = c[0]; nebCol[i*3+1] = c[1]; nebCol[i*3+2] = c[2];
-    nebSize[i] = 8 + Math.random() * 30;
-  }
-  nebGeo.setAttribute('position', new THREE.BufferAttribute(nebPos, 3));
-  nebGeo.setAttribute('nebColor', new THREE.BufferAttribute(nebCol, 3));
-  nebGeo.setAttribute('size', new THREE.BufferAttribute(nebSize, 1));
+  const edgeMat = new THREE.LineBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.12});
+  const edgeMatBright = new THREE.LineBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.25});
 
-  const nebMat = new THREE.ShaderMaterial({
-    uniforms: { uTime: {value: 0} },
-    vertexShader: `
-      attribute float size;
-      attribute vec3 nebColor;
-      uniform float uTime;
-      varying vec3 vColor;
-      varying float vAlpha;
-      void main(){
-        vColor = nebColor;
-        vec4 mv = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (200.0 / -mv.z);
-        gl_Position = projectionMatrix * mv;
-        vAlpha = 0.12 + 0.08 * sin(uTime * 0.3 + position.z * 0.05);
-      }
-    `,
-    fragmentShader: `
-      varying vec3 vColor;
-      varying float vAlpha;
-      void main(){
-        float d = length(gl_PointCoord - 0.5);
-        if(d > 0.5) discard;
-        float soft = exp(-d * d * 8.0);
-        gl_FragColor = vec4(vColor, soft * vAlpha);
-      }
-    `,
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
-  });
-  const nebula = new THREE.Points(nebGeo, nebMat);
-  scene.add(nebula);
+  // Central icosahedron — the "planet" polyhedron
+  const icoGeo = new THREE.IcosahedronGeometry(1.6, 0);
+  const icoEdge = new THREE.EdgesGeometry(icoGeo);
+  const ico = new THREE.LineSegments(icoEdge, edgeMatBright.clone());
+  scene.add(ico);
 
-  // Orbital ring — glowing wireframe torus
-  const ringGeo = new THREE.TorusGeometry(3.2, 0.012, 16, 120);
-  const ringMat = new THREE.MeshBasicMaterial({color: 0x4488cc, transparent: true, opacity: 0.25});
+  // Outer dodecahedron shell
+  const dodGeo = new THREE.DodecahedronGeometry(2.8, 0);
+  const dodEdge = new THREE.EdgesGeometry(dodGeo);
+  const dod = new THREE.LineSegments(dodEdge, edgeMat.clone());
+  scene.add(dod);
+
+  // Orbital ring — single thin torus
+  const ringGeo = new THREE.TorusGeometry(3.8, 0.008, 8, 128);
+  const ringMat = new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.1});
   const ring = new THREE.Mesh(ringGeo, ringMat);
-  ring.rotation.x = Math.PI * 0.45;
+  ring.rotation.x = Math.PI * 0.52;
   scene.add(ring);
 
-  const ring2Geo = new THREE.TorusGeometry(4.5, 0.008, 16, 160);
-  const ring2Mat = new THREE.MeshBasicMaterial({color: 0x6644aa, transparent: true, opacity: 0.15});
-  const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
-  ring2.rotation.x = Math.PI * 0.6;
-  ring2.rotation.y = Math.PI * 0.3;
+  // Second ring at different angle
+  const ring2 = new THREE.Mesh(
+    new THREE.TorusGeometry(5.0, 0.005, 8, 160),
+    new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.06})
+  );
+  ring2.rotation.x = Math.PI * 0.35;
+  ring2.rotation.y = Math.PI * 0.25;
   scene.add(ring2);
 
-  // Camera drift target
+  // Small orbiting sphere — "moon"
+  const moonGeo = new THREE.IcosahedronGeometry(0.18, 0);
+  const moonEdge = new THREE.EdgesGeometry(moonGeo);
+  const moon = new THREE.LineSegments(moonEdge, edgeMatBright.clone());
+  scene.add(moon);
+
+  // Second smaller orbiter
+  const moon2Geo = new THREE.OctahedronGeometry(0.1, 0);
+  const moon2Edge = new THREE.EdgesGeometry(moon2Geo);
+  const moon2 = new THREE.LineSegments(moon2Edge, edgeMat.clone());
+  scene.add(moon2);
+
+  // Vertex glow dots on the icosahedron
+  const vertGeo = new THREE.BufferGeometry();
+  vertGeo.setAttribute('position', icoGeo.getAttribute('position'));
+  const vertMat = new THREE.PointsMaterial({
+    color: 0xffffff, size: 0.05, sizeAttenuation: true,
+    transparent: true, opacity: 0.6
+  });
+  const verts = new THREE.Points(vertGeo, vertMat);
+  scene.add(verts);
+
   let mouseX = 0, mouseY = 0;
   document.addEventListener('mousemove', e => {
     mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -220,17 +167,29 @@
   function tick() {
     if (!alive) return;
     const t = clock.getElapsedTime();
-    starMat.uniforms.uTime.value = t;
-    nebMat.uniforms.uTime.value = t;
 
-    stars.rotation.y = t * 0.015;
-    stars.rotation.x = t * 0.005;
-    nebula.rotation.y = -t * 0.008;
-    ring.rotation.z = t * 0.12;
-    ring2.rotation.z = -t * 0.08;
+    ico.rotation.y = t * 0.08;
+    ico.rotation.x = t * 0.03;
+    verts.rotation.copy(ico.rotation);
 
-    cam.position.x += (mouseX * 1.5 - cam.position.x) * 0.02;
-    cam.position.y += (-mouseY * 1.0 - cam.position.y) * 0.02;
+    dod.rotation.y = -t * 0.04;
+    dod.rotation.z = t * 0.02;
+
+    ring.rotation.z = t * 0.06;
+    ring2.rotation.z = -t * 0.03;
+
+    const mAngle = t * 0.4;
+    moon.position.set(Math.cos(mAngle) * 4.2, Math.sin(mAngle) * 0.8, Math.sin(mAngle) * 4.2);
+    moon.rotation.y = t * 0.5;
+
+    const m2Angle = t * 0.25 + 2;
+    moon2.position.set(Math.cos(m2Angle) * 5.5, Math.sin(m2Angle * 0.7) * 1.2, Math.sin(m2Angle) * 5.5);
+
+    // Gentle breathing opacity on the central icosahedron
+    ico.material.opacity = 0.2 + 0.08 * Math.sin(t * 0.6);
+
+    cam.position.x += (mouseX * 1.2 - cam.position.x) * 0.015;
+    cam.position.y += (-mouseY * 0.8 - cam.position.y) * 0.015;
     cam.lookAt(0, 0, 0);
 
     renderer.render(scene, cam);
@@ -244,15 +203,14 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  // Cleanup on loader dismiss
-  const loader = document.getElementById('loader');
+  const loaderEl = document.getElementById('loader');
   const ob = new MutationObserver(() => {
-    if (loader.classList.contains('done')) {
-      setTimeout(() => { alive = false; renderer.dispose(); }, 800);
+    if (loaderEl.classList.contains('done')) {
+      setTimeout(() => { alive = false; renderer.dispose(); }, 900);
       ob.disconnect();
     }
   });
-  ob.observe(loader, {attributes: true, attributeFilter: ['class']});
+  ob.observe(loaderEl, {attributes: true, attributeFilter: ['class']});
   </script>
 
   <!-- WeChat QR Modal -->
