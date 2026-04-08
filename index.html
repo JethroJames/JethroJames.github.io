@@ -68,92 +68,149 @@
       <div class="loader-skip">Click anywhere to enter</div>
     </div>
   </div>
-  <script type="importmap">{"imports":{"three":"https://esm.sh/three@0.170.0"}}</script>
+  <script type="importmap">{"imports":{"three":"https://esm.sh/three@0.170.0","three/addons/":"https://esm.sh/three@0.170.0/examples/jsm/"}}</script>
   <script type="module">
   import * as THREE from 'three';
+  import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+  import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+  import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 
   const canvas = document.getElementById('cosmosCanvas');
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: false});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000000);
-  scene.fog = new THREE.FogExp2(0x000000, 0.035);
 
-  const cam = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 200);
-  cam.position.set(0, 0, 8);
+  const cam = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 800);
+  cam.position.set(0, 2, 18);
 
-  // Minimal starfield — sparse, elegant dots
-  const STARS = 800;
-  const sGeo = new THREE.BufferGeometry();
-  const sPos = new Float32Array(STARS * 3);
-  for (let i = 0; i < STARS; i++) {
-    sPos[i*3]   = (Math.random() - 0.5) * 80;
-    sPos[i*3+1] = (Math.random() - 0.5) * 80;
-    sPos[i*3+2] = (Math.random() - 0.5) * 80;
-  }
-  sGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
-  const sMat = new THREE.PointsMaterial({
-    color: 0xffffff, size: 0.04, sizeAttenuation: true,
-    transparent: true, opacity: 0.5
-  });
-  scene.add(new THREE.Points(sGeo, sMat));
-
-  const edgeMat = new THREE.LineBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.12});
-  const edgeMatBright = new THREE.LineBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.25});
-
-  // Central icosahedron — the "planet" polyhedron
-  const icoGeo = new THREE.IcosahedronGeometry(1.6, 0);
-  const icoEdge = new THREE.EdgesGeometry(icoGeo);
-  const ico = new THREE.LineSegments(icoEdge, edgeMatBright.clone());
-  scene.add(ico);
-
-  // Outer dodecahedron shell
-  const dodGeo = new THREE.DodecahedronGeometry(2.8, 0);
-  const dodEdge = new THREE.EdgesGeometry(dodGeo);
-  const dod = new THREE.LineSegments(dodEdge, edgeMat.clone());
-  scene.add(dod);
-
-  // Orbital ring — single thin torus
-  const ringGeo = new THREE.TorusGeometry(3.8, 0.008, 8, 128);
-  const ringMat = new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.1});
-  const ring = new THREE.Mesh(ringGeo, ringMat);
-  ring.rotation.x = Math.PI * 0.52;
-  scene.add(ring);
-
-  // Second ring at different angle
-  const ring2 = new THREE.Mesh(
-    new THREE.TorusGeometry(5.0, 0.005, 8, 160),
-    new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.06})
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, cam));
+  const bloom = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight), 0.8, 0.6, 0.2
   );
-  ring2.rotation.x = Math.PI * 0.35;
-  ring2.rotation.y = Math.PI * 0.25;
-  scene.add(ring2);
+  composer.addPass(bloom);
 
-  // Small orbiting sphere — "moon"
-  const moonGeo = new THREE.IcosahedronGeometry(0.18, 0);
-  const moonEdge = new THREE.EdgesGeometry(moonGeo);
-  const moon = new THREE.LineSegments(moonEdge, edgeMatBright.clone());
-  scene.add(moon);
+  const wh = c => new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:c});
 
-  // Second smaller orbiter
-  const moon2Geo = new THREE.OctahedronGeometry(0.1, 0);
-  const moon2Edge = new THREE.EdgesGeometry(moon2Geo);
-  const moon2 = new THREE.LineSegments(moon2Edge, edgeMat.clone());
-  scene.add(moon2);
+  // ── Deep star field: 3 layers at different depths ──
+  function makeStars(count, spread, size, opacity) {
+    const g = new THREE.BufferGeometry();
+    const p = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      p[i*3]   = (Math.random()-0.5) * spread;
+      p[i*3+1] = (Math.random()-0.5) * spread;
+      p[i*3+2] = (Math.random()-0.5) * spread;
+    }
+    g.setAttribute('position', new THREE.BufferAttribute(p, 3));
+    return new THREE.Points(g, new THREE.PointsMaterial({
+      color:0xffffff, size, sizeAttenuation:true, transparent:true, opacity
+    }));
+  }
+  const starLayers = [
+    makeStars(3000, 500, 0.08, 0.3),
+    makeStars(1500, 300, 0.15, 0.45),
+    makeStars(400, 150, 0.3, 0.6),
+  ];
+  starLayers.forEach(s => scene.add(s));
 
-  // Vertex glow dots on the icosahedron
+  // ── Streaming dust — particles flying past camera ──
+  const DUST = 600;
+  const dustGeo = new THREE.BufferGeometry();
+  const dustPos = new Float32Array(DUST * 3);
+  const dustVel = new Float32Array(DUST);
+  for (let i = 0; i < DUST; i++) {
+    dustPos[i*3]   = (Math.random()-0.5) * 30;
+    dustPos[i*3+1] = (Math.random()-0.5) * 20;
+    dustPos[i*3+2] = Math.random() * -60;
+    dustVel[i] = 0.02 + Math.random() * 0.06;
+  }
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+    color:0xffffff, size:0.03, sizeAttenuation:true, transparent:true, opacity:0.25
+  }));
+  scene.add(dust);
+
+  // ── Central structure: nested polyhedra ──
+  const coreGroup = new THREE.Group();
+  scene.add(coreGroup);
+
+  // Inner: icosahedron (bright)
+  const icoGeo = new THREE.IcosahedronGeometry(1.8, 0);
+  const ico = new THREE.LineSegments(new THREE.EdgesGeometry(icoGeo), wh(0.4));
+  coreGroup.add(ico);
+
+  // Vertex dots
   const vertGeo = new THREE.BufferGeometry();
   vertGeo.setAttribute('position', icoGeo.getAttribute('position'));
-  const vertMat = new THREE.PointsMaterial({
-    color: 0xffffff, size: 0.05, sizeAttenuation: true,
-    transparent: true, opacity: 0.6
-  });
-  const verts = new THREE.Points(vertGeo, vertMat);
-  scene.add(verts);
+  const verts = new THREE.Points(vertGeo, new THREE.PointsMaterial({
+    color:0xffffff, size:0.08, sizeAttenuation:true, transparent:true, opacity:0.8
+  }));
+  coreGroup.add(verts);
+
+  // Middle: dodecahedron
+  const dod = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.DodecahedronGeometry(3.2, 0)), wh(0.15)
+  );
+  coreGroup.add(dod);
+
+  // Outer: large icosahedron shell
+  const outerIco = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(5.5, 1)), wh(0.06)
+  );
+  coreGroup.add(outerIco);
+
+  // Vast: very large octahedron at the edge of perception
+  const vastOct = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.OctahedronGeometry(12, 0)), wh(0.04)
+  );
+  coreGroup.add(vastOct);
+
+  // ── Orbital rings at different scales ──
+  function makeRing(radius, tube, opacity, rx, ry) {
+    const m = new THREE.Mesh(
+      new THREE.TorusGeometry(radius, tube, 8, 200),
+      new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity})
+    );
+    m.rotation.x = rx; m.rotation.y = ry || 0;
+    return m;
+  }
+  const rings = [
+    makeRing(4, 0.006, 0.12, Math.PI*0.5),
+    makeRing(5.8, 0.004, 0.08, Math.PI*0.38, Math.PI*0.15),
+    makeRing(8, 0.003, 0.05, Math.PI*0.6, -Math.PI*0.1),
+    makeRing(14, 0.002, 0.03, Math.PI*0.45, Math.PI*0.3),
+  ];
+  rings.forEach(r => coreGroup.add(r));
+
+  // ── Orbiting moons ──
+  const moon1 = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.25, 0)), wh(0.5)
+  );
+  const moon2 = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.OctahedronGeometry(0.15, 0)), wh(0.35)
+  );
+  const moon3 = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.TetrahedronGeometry(0.12, 0)), wh(0.25)
+  );
+  scene.add(moon1, moon2, moon3);
+
+  // ── Connecting constellation lines ──
+  const constellGeo = new THREE.BufferGeometry();
+  const cPoints = [];
+  for (let i = 0; i < 15; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 20 + Math.random() * 40;
+    const y = (Math.random()-0.5) * 30;
+    cPoints.push(r*Math.cos(a), y, r*Math.sin(a));
+    const a2 = a + (Math.random()-0.5) * 0.5;
+    const r2 = r + (Math.random()-0.5) * 10;
+    cPoints.push(r2*Math.cos(a2), y + (Math.random()-0.5)*8, r2*Math.sin(a2));
+  }
+  constellGeo.setAttribute('position', new THREE.Float32BufferAttribute(cPoints, 3));
+  scene.add(new THREE.LineSegments(constellGeo, wh(0.025)));
 
   let mouseX = 0, mouseY = 0;
   document.addEventListener('mousemove', e => {
@@ -168,31 +225,66 @@
     if (!alive) return;
     const t = clock.getElapsedTime();
 
-    ico.rotation.y = t * 0.08;
-    ico.rotation.x = t * 0.03;
-    verts.rotation.copy(ico.rotation);
-
-    dod.rotation.y = -t * 0.04;
-    dod.rotation.z = t * 0.02;
-
-    ring.rotation.z = t * 0.06;
-    ring2.rotation.z = -t * 0.03;
-
-    const mAngle = t * 0.4;
-    moon.position.set(Math.cos(mAngle) * 4.2, Math.sin(mAngle) * 0.8, Math.sin(mAngle) * 4.2);
-    moon.rotation.y = t * 0.5;
-
-    const m2Angle = t * 0.25 + 2;
-    moon2.position.set(Math.cos(m2Angle) * 5.5, Math.sin(m2Angle * 0.7) * 1.2, Math.sin(m2Angle) * 5.5);
-
-    // Gentle breathing opacity on the central icosahedron
-    ico.material.opacity = 0.2 + 0.08 * Math.sin(t * 0.6);
-
-    cam.position.x += (mouseX * 1.2 - cam.position.x) * 0.015;
-    cam.position.y += (-mouseY * 0.8 - cam.position.y) * 0.015;
+    // Camera: slow dolly-in + mouse parallax
+    const camZ = 18 - Math.min(t * 0.5, 8);
+    cam.position.z += (camZ - cam.position.z) * 0.02;
+    cam.position.x += (mouseX * 2.5 - cam.position.x) * 0.012;
+    cam.position.y += (2 - mouseY * 1.5 - cam.position.y) * 0.012;
     cam.lookAt(0, 0, 0);
 
-    renderer.render(scene, cam);
+    // Core structure rotation
+    ico.rotation.y = t * 0.06;
+    ico.rotation.x = t * 0.025;
+    verts.rotation.copy(ico.rotation);
+
+    dod.rotation.y = -t * 0.035;
+    dod.rotation.z = t * 0.015;
+
+    outerIco.rotation.y = t * 0.012;
+    outerIco.rotation.x = -t * 0.008;
+
+    vastOct.rotation.y = -t * 0.006;
+    vastOct.rotation.x = t * 0.004;
+
+    // Rings
+    rings[0].rotation.z = t * 0.04;
+    rings[1].rotation.z = -t * 0.025;
+    rings[2].rotation.z = t * 0.015;
+    rings[3].rotation.z = -t * 0.008;
+
+    // Moons on different orbits
+    const m1a = t * 0.3;
+    moon1.position.set(Math.cos(m1a)*5.5, Math.sin(m1a*0.7)*1.5, Math.sin(m1a)*5.5);
+    moon1.rotation.y = t * 0.4;
+
+    const m2a = t * 0.18 + 2.5;
+    moon2.position.set(Math.cos(m2a)*9, Math.sin(m2a*0.5)*2, Math.sin(m2a)*9);
+    moon2.rotation.y = -t * 0.3;
+
+    const m3a = t * 0.12 + 4.5;
+    moon3.position.set(Math.cos(m3a)*15, Math.sin(m3a*0.3)*3.5, Math.sin(m3a)*15);
+
+    // Streaming dust
+    const dp = dustGeo.attributes.position.array;
+    for (let i = 0; i < DUST; i++) {
+      dp[i*3+2] += dustVel[i];
+      if (dp[i*3+2] > 5) {
+        dp[i*3]   = (Math.random()-0.5) * 30;
+        dp[i*3+1] = (Math.random()-0.5) * 20;
+        dp[i*3+2] = -60;
+      }
+    }
+    dustGeo.attributes.position.needsUpdate = true;
+
+    // Star layer slow rotation
+    starLayers[0].rotation.y = t * 0.002;
+    starLayers[1].rotation.y = -t * 0.003;
+    starLayers[2].rotation.y = t * 0.005;
+
+    // Breathing glow on core
+    ico.material.opacity = 0.3 + 0.15 * Math.sin(t * 0.5);
+
+    composer.render();
     requestAnimationFrame(tick);
   }
   tick();
@@ -201,6 +293,7 @@
     cam.aspect = window.innerWidth / window.innerHeight;
     cam.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    composer.setSize(window.innerWidth, window.innerHeight);
   });
 
   const loaderEl = document.getElementById('loader');
