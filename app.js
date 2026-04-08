@@ -5,8 +5,8 @@ import { prepare, layout } from 'https://esm.sh/@chenglou/pretext'
 // ============================================================
 
 const loader = document.getElementById('loader')
-const LOADER_SOFT_DELAY_MS = 1400
-const LOADER_HARD_TIMEOUT_MS = 4200
+const LOADER_SOFT_DELAY_MS = 3500
+const LOADER_HARD_TIMEOUT_MS = 6000
 
 function dismissLoader() {
   if (loader && !loader.classList.contains('done')) {
@@ -25,7 +25,7 @@ if (loader) {
     window.addEventListener('DOMContentLoaded', () => scheduleDismiss(LOADER_SOFT_DELAY_MS), { once: true })
   }
 
-  window.addEventListener('load', () => scheduleDismiss(500), { once: true })
+  window.addEventListener('load', () => scheduleDismiss(LOADER_SOFT_DELAY_MS), { once: true })
   scheduleDismiss(LOADER_HARD_TIMEOUT_MS)
 }
 
