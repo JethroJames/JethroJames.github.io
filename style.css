@@ -811,7 +811,6 @@ a:hover { color: var(--link-hover); }
   padding: 2px 8px;
   border-radius: 100px;
   white-space: nowrap;
-  text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 .badge-conf { background: rgba(179,27,27,0.1); color: var(--accent); }
