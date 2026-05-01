@@ -815,8 +815,10 @@ a:hover { color: var(--link-hover); }
 }
 .badge-conf { background: rgba(179,27,27,0.1); color: var(--accent); }
 .badge-journal { background: rgba(26,82,118,0.1); color: var(--link); }
+.badge-preprint { background: rgba(46,125,50,0.1); color: #2e7d32; }
 [data-theme="dark"] .badge-conf { background: rgba(255,107,107,0.15); }
 [data-theme="dark"] .badge-journal { background: rgba(106,176,222,0.15); }
+[data-theme="dark"] .badge-preprint { background: rgba(102,187,106,0.15); color: #66bb6a; }
 .news-item p {
   font-size: 0.85rem;
   color: var(--text-secondary);
