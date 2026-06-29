@@ -2,6 +2,10 @@
 
 Static project page for the VidPair-Halluc benchmark.
 
+- Live page: https://jethrojames.github.io/VidPair-Halluc/
+- Dataset: https://huggingface.co/datasets/Jethro37/VidPair-Halluc
+- Code: https://github.com/JethroJames/VidPair-Halluc
+
 ## Preview
 
 ```bash
